@@ -146,7 +146,7 @@ STATICFILES_DIRS = [
 
 # 设置媒体文件的存储路径:
 MEDIA_URL = '/static/media/'
-MEDIA_ROOT = os.path.join('BASE_DIR','static/media')
+MEDIA_ROOT = os.path.join(BASE_DIR,'static/media')
 
 # 扩展内置的auth_user认证表:
 AUTH_USER_MODEL = "users.UserProfile"
