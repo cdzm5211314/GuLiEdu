@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-
+import xadmin
 
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
+    # 使用xadmin插件
+    url(r'^xadmin/', xadmin.site.urls),
+
     # 路由分发
     url(r'^users/', include('users.urls',namespace='users')),
     url(r'^courses/', include('courses.urls',namespace='courses')),

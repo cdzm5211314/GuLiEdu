@@ -19,6 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 1.设置apps总应用包到Python搜寻环境变量中
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+# 配置xadmin插件到Python搜寻环境变量中
+sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -46,6 +48,9 @@ INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     'orgs.apps.OrgsConfig',
     'operations.apps.OperationsConfig',
+    # 配置xadmin插件应用
+    'xadmin',
+    'crispy_forms',
 
 ]
 
