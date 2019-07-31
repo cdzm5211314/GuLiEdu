@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
 from .forms import UserRegisterForm, UserLoginForm
-from users.models import UserProfile
+from users.models import UserProfile,EmailVerifyCode
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from tools.send_email_tool import send_mail_code
@@ -75,5 +75,24 @@ def user_logout(request):
     logout(request)
     return redirect(reverse('index'))
 
+
+# 注册账号激活
+def user_active(request,code):
+    if code:  # 获取到验证码参数
+        emailVerifyCode_list = EmailVerifyCode.objects.filter(code=code)  # 根据验证码查找数据库是否存在数据
+        if emailVerifyCode_list: # 数据库存在数据
+            email = emailVerifyCode_list[0].email  # 获取到邮箱
+            user_list = UserProfile.objects.filter(username=email)  # 根据邮箱查找用户信息数据
+            if user_list:  # 数据库存在数据
+                user = user_list[0]
+                user.is_start = True  # 修改用户的激活字段is_start = True
+                user.save()  # 注册账号已经激活
+                return redirect(reverse('users:user_login'))  # 重定向到登陆页面
+            else:
+                pass
+        else:
+            pass
+    else:
+        pass
 
 
