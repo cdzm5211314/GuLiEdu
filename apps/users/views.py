@@ -15,7 +15,9 @@ def index(request):
 # 注册
 def user_register(request):
     if request.method == 'GET':
-        return render(request, 'register.html')
+        # 此处实例化forms类,目的不是为了验证,而是为了使用验证码
+        user_register_form = UserRegisterForm()
+        return render(request, 'register.html',{'user_register_form':user_register_form})
     else:
         # 获取form注册表单数据
         user_register_form = UserRegisterForm(request.POST)

@@ -23,7 +23,7 @@ class UserProfile(AbstractUser):
     gender = models.CharField(choices=(('girl','女'),('boy','男')),max_length=10,verbose_name="用户性别",default='girl')
     address = models.CharField(max_length=200,verbose_name="用户地址",null=True,blank=True)
     phone = models.CharField(max_length=11,verbose_name="用户手机",null=True,blank=True)
-    #这个字段控制激活
+    # 这个字段控制激活
     is_start = models.BooleanField(default=False,verbose_name="是否激活")
     add_time = models.DateTimeField(default=datetime.now,verbose_name="添加时间")
 

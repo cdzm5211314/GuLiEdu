@@ -4,7 +4,7 @@
 # @Date : 2019-07-30 17:01
 
 from django import forms
-
+from captcha.fields import CaptchaField
 
 # 注册表单类
 class UserRegisterForm(forms.Form):
@@ -15,6 +15,8 @@ class UserRegisterForm(forms.Form):
         'required':'密码必须填写',
         'min_length':'密码至少6位'
     })
+
+    captcha = CaptchaField()  # 验证码
 
 # 登陆表单类
 class UserLoginForm(forms.Form):

@@ -51,6 +51,9 @@ INSTALLED_APPS = [
     # 配置xadmin插件应用
     'xadmin',
     'crispy_forms',
+    # 配置第三方验证码
+    'captcha',
+
 
 ]
 

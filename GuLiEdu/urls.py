@@ -22,6 +22,8 @@ urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     # 使用xadmin插件
     url(r'^xadmin/', xadmin.site.urls),
+    # 使用验证码
+    url(r'^captcha/',include('captcha.urls')),
 
     # 路由分发
     url(r'^users/', include('users.urls', namespace='users')),
