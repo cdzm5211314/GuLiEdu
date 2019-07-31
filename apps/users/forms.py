@@ -1,0 +1,27 @@
+# -*- coding:utf-8 -*-
+# @Desc :
+# @Author : Administrator
+# @Date : 2019-07-30 17:01
+
+from django import forms
+
+
+# 注册表单类
+class UserRegisterForm(forms.Form):
+    email = forms.EmailField(required=True,error_messages={
+        'required':'邮箱必须填写'
+    })
+    password = forms.CharField(required=True,min_length=6,error_messages={
+        'required':'密码必须填写',
+        'min_length':'密码至少6位'
+    })
+
+# 登陆表单类
+class UserLoginForm(forms.Form):
+    email = forms.EmailField(required=True,error_messages={
+        'required':'邮箱必须填写'
+    })
+    password = forms.CharField(required=True,min_length=6,error_messages={
+        'required':'密码必须填写',
+        'min_length':'密码至少6位'
+    })
