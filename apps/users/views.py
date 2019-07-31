@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, HttpResponse
 from .forms import UserRegisterForm, UserLoginForm
 from users.models import UserProfile
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
-
+from tools.send_email_tool import send_mail_code
 
 # Create your views here.
 
@@ -35,7 +35,9 @@ def user_register(request):
                 user.set_password(password)
                 user.email = email
                 user.save()
-                return redirect(reverse('index'))
+                send_mail_code(email,1)
+                return HttpResponse("请尽快登陆你的邮件进行账号激活,否则无法登陆...")
+                # return redirect(reverse('index'))
         else:  # 表单数据验证不合法
             return render(request, 'register.html', {
                 'user_register_form': user_register_form
@@ -48,16 +50,21 @@ def user_login(request):
         return render(request, 'login.html')
     else:
         # 获取form登陆表单数据
-        user_login_form = UserLoginForm()
+        user_login_form = UserLoginForm(request.POST)
         if user_login_form.is_valid():  # 验证登陆的邮箱与密码数据
             # 验证成功,获取提交的数据
             email = user_login_form.cleaned_data['email']
             password = user_login_form.cleaned_data['password']
             # 验证用户信息,正确返回True
             user = authenticate(username=email, password=password)
+            print(user)
             if user:
-                login(request,user)
-                return redirect(reverse('index'))
+                # 判断用户是否被激活,如果没激活则无法登陆
+                if user.is_start:  # 已激活
+                    login(request,user)
+                    return redirect(reverse('index'))
+                else:
+                    return HttpResponse("你的账号未被激活,请去邮箱激活,否则无法登陆...")
             else:
                 return render(request,'login.html',{'mgs':'用户名或密码错误'})
         else:

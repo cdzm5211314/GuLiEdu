@@ -158,3 +158,13 @@ AUTH_USER_MODEL = "users.UserProfile"
 # settings配置设置不检查用户的活跃状态is_active
 # AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
 
+# 发送邮件配置信息
+EMAIL_HOST = 'smtp.163.com'                      # smpt服务地址
+EMAIL_PORT = 25                                  # 端口号
+EMAIL_HOST_USER = 'configureadmin@163.com'       # 发送邮件的邮箱地址即发件人
+EMAIL_HOST_PASSWORD = 'asdfghjkl123456'          # 发送邮件的邮箱[即发件人]中设置的客户端授权密码
+EMAIL_FROM = '谷粒教育<configureadmin@163.com>'  # 收件人看到的发件人
+
+
+
+
