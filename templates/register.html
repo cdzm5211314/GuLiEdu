@@ -68,11 +68,10 @@
 {#                            <img src="/captcha/image/2f3f82e5f7a054bf5caa93b9b0bb6cc308fb7011/" alt="captcha" class="captcha" /> <input id="id_captcha_0" name="captcha_0" type="hidden" value="2f3f82e5f7a054bf5caa93b9b0bb6cc308fb7011" /> <input autocomplete="off" id="id_captcha_1" name="captcha_1" type="text" />#}
                         </div>
                         <div class="error btns" id="jsEmailTips">
-                            {{ mgs }}
+                            {{ msg }}
                             {% for key,error in user_register_form.errors.items %}
                                 {{ error }}
                             {% endfor %}
-
                         </div>
                         <div class="auto-box marb8">
                         </div>

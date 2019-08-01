@@ -12,5 +12,9 @@ urlpatterns = [
     url(r'^user_logout/$', views.user_logout, name='user_logout'),
     # 注册账号激活
     url(r'^user_active/(\w+)$', views.user_active, name='user_active'),
+    # 重置密码邮件验证码
+    url(r'^user_forget/$', views.user_forget, name='user_forget'),
+    # 重置密码
+    url(r'^user_reset/(\w+)$', views.user_reset, name='user_reset'),
 
 ]

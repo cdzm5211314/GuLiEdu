@@ -27,3 +27,28 @@ class UserLoginForm(forms.Form):
         'required':'密码必须填写',
         'min_length':'密码至少6位'
     })
+
+# 重置密码邮箱验证码表单
+class UserForgetForm(forms.Form):
+    email = forms.EmailField(required=True,error_messages={
+        'required':'邮箱必须填写'
+    })
+    captcha = CaptchaField()  # 验证码
+
+# 重置密码表单
+class UserResetForm(forms.Form):
+    password = forms.CharField(required=True,min_length=6,error_messages={
+        'required':'密码必须填写',
+        'min_length':'密码至少6位',
+        'max_length':'密码不能超过20位',
+    })
+    password1 = forms.CharField(required=True,min_length=6,error_messages={
+        'required':'密码必须填写',
+        'min_length':'密码至少6位',
+        'max_length':'密码不能超过20位',
+    })
+
+
+
+
+

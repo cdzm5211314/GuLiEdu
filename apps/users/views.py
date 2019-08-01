@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
-from .forms import UserRegisterForm, UserLoginForm
+from .forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm
 from users.models import UserProfile,EmailVerifyCode
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
@@ -95,4 +95,54 @@ def user_active(request,code):
     else:
         pass
 
+# 重置密码邮箱验证码
+def user_forget(request):
+    if request.method == "GET":
+        # 此处实例化forms类,目的不是为了验证,而是为了使用验证码
+        user_forget_form = UserForgetForm()
+        return render(request,'forgetpwd.html',{'user_forget_form':user_forget_form})
+    else:
+        # 获取提交的form表单数据
+        user_forget_form = UserForgetForm(request.POST)
+        if user_forget_form.is_valid():  # 验证表单数据
+            email = user_forget_form.cleaned_data['email']  # 获取账号信息
+            user_list = UserProfile.objects.filter(email=email)  # 根据email到数据库查询用户信息
+            if user_list:  # 用户存在
+                send_mail_code(email,2)
+                return HttpResponse("请登陆邮箱重置您的密码!!!")
+            else:  # 用户不存在
+                return render(request,'forgetpwd.html',{'msg':'用户不存在...'})
+        else:  # 表单验证不通过
+            return render(request,'forgetpwd.html',{'user_forget_form':user_forget_form})
+
+# 重置密码
+def user_reset(request,code):
+    if code:  #  是否获取到验证码
+        if request.method == 'GET':
+            return render(request,'password_reset.html',{'code':code})
+        else:  # post请求
+            user_reset_form = UserResetForm(request.POST)
+            if user_reset_form.is_valid():  # 验证数据
+                password = user_reset_form.cleaned_data['password']
+                password1 = user_reset_form.cleaned_data['password1']
+                if password == password1:
+                    emailVerifyCode_list = EmailVerifyCode.objects.filter(code=code)  # 根据验证码参数查询邮件验证码数据
+                    if emailVerifyCode_list:  # 数据存在
+                        email = emailVerifyCode_list[0].email  # 根据查询到的数据获取email信息
+                        user_list = UserProfile.objects.filter(email=email)
+                        if user_list:
+                            user = user_list[0]
+                            user.set_password(password)
+                            user.save()
+                            return redirect(reverse('users:user_login'))
+                        else:  # 用户不存在
+                            pass
+                    else:  # 邮箱验证码数据不存在
+                        pass
+                else:
+                    return render(request,'password_reset.html',{'msg':'两次密码输入不一致','code':code})
+            else:  # form表单数据验证不通过
+                return render(request,'password_reset.html',{'user_reset_form':user_reset_form,'code':code})
+    else:  # 未获取到邮箱验证码
+        pass
 

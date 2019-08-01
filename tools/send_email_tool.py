@@ -33,10 +33,17 @@ def send_mail_code(email,send_type):
     # EMAIL_FROM = '天天生鲜<configureadmin@163.com>'  # 收件人看到的发件人
 
     ## 3.发送邮件的具体内容信息
+    # 激活用户
     if send_type == 1:
         send_title = "欢迎注册谷粒教育网站:"
         send_body = "请点击以下链接,进行激活账号: \n http://127.0.0.1:8000/users/user_active/" + code
         # 发送邮件
         send_mail(send_title,send_body,settings.EMAIL_FROM,[email])
 
+    # 重置密码
+    if send_type == 2:
+        send_title = "谷粒教育重置密码系统:"
+        send_body = "请点击以下链接进行重置密码: \n http://127.0.0.1:8000/users/user_reset/" + code
+        # 发送邮件
+        send_mail(send_title,send_body,settings.EMAIL_FROM,[email])
 
