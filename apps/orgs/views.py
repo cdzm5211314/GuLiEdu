@@ -20,6 +20,11 @@ def org_list(request):
     if cityid:
         all_orgs = all_orgs.filter(cityinfo_id=int(cityid))
 
+    # 排序,根据学习人数或课程数进行排序
+    sort = request.GET.get('sort','')
+    if sort:
+        all_orgs = all_orgs.order_by('-' + sort)
+
 
     # 分页显示
     page_num = request.GET.get('page_num','')  # 获取url传递过来的页码数值,默认值为1,可自定义
@@ -45,6 +50,7 @@ def org_list(request):
         'sort_orgs':sort_orgs,
         'cate':cate,
         'cityid':cityid,
+        'sort':sort,
     })
 
 
