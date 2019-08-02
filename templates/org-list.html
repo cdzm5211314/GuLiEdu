@@ -25,13 +25,13 @@
                         <li>
                             <h2>机构类别</h2>
                             <div class="cont">
-                                <a href="?city="><span class="active2">全部</span></a>
+                                <a href="?&cityid={{ cityid }}"><span {% if cate == '' %} class="active2" {% endif %}>全部</span></a>
 
-                                <a href="?ct=pxjg&city="><span class="">培训机构</span></a>
+                                <a href="?cate=pxjg&cityid={{ cityid }}"><span {% if cate == 'pxjg' %} class="active2" {% endif %}>培训机构</span></a>
 
-                                <a href="?ct=gx&city="><span class="">高校</span></a>
+                                <a href="?cate=gx&cityid={{ cityid }}"><span {% if cate == 'gx' %} class="active2" {% endif %}>高校</span></a>
 
-                                <a href="?ct=gr&city="><span class="">个人</span></a>
+                                <a href="?cate=gr&cityid={{ cityid }}"><span {% if cate == 'gr' %} class="active2" {% endif %}>个人</span></a>
 
                             </div>
                         </li>
@@ -39,9 +39,10 @@
                             <h2>所在地区</h2>
                             <div class="more">更多</div>
                             <div class="cont">
-                                <a href="?ct="><span class="active2">全部</span></a>
+                                <a href="?"><span {% if cityid == ''%} class="active2" {% endif %}>全部</span></a>
                                 {% for city in all_citys %}
-                                    <a href="?city=1&ct="><span class="">{{ city.name }}</span></a>
+                                    {# 把数据类型变成字符串类型,i固定写法  city.id|stringformat:'i' #}
+                                    <a href="?cityid={{ city.id }}&cate={{ cate }}"><span {% if cityid == city.id|stringformat:'i'%} class="active2" {% endif %}>{{ city.name }}</span></a>
                                 {% endfor %}
 
                             </div>
@@ -102,18 +103,18 @@
                             {# 分页显示 #}
                             {# 是否有上一页,有就获取上一页的页码值 #}
                             {% if pages.has_previous %}
-                                <li class="long"><a href="?page_num={{ pages.previous_page_number }} ">上一页</a></li>
+                                <li class="long"><a href="?page_num={{ pages.previous_page_number }}&cate={{ cate }}&cityid={{ cityid }} ">上一页</a></li>
                             {% endif %}
 
                             {# 所有页码值 #}
                             {% for num in pages.paginator.page_range %}
                                 {# 选中当前页码进行标识 #}
-                                <li {% if num == pages.number %} class="active" {% endif %} ><a href="?page_num={{ num }}">{{ num }}</a></li>
+                                <li {% if num == pages.number %} class="active" {% endif %} ><a href="?page_num={{ num }}&cate={{ cate }}&cityid={{ cityid }} ">{{ num }}</a></li>
                             {% endfor %}
 
                             {# 是否有下一页,有就获取下一页的页码值 #}
                             {% if pages.has_next %}
-                                <li class="long"><a href="?page_num={{ pages.next_page_number }}">下一页</a></li>
+                                <li class="long"><a href="?page_num={{ pages.next_page_number }}&cate={{ cate }}&cityid={{ cityid }} ">下一页</a></li>
                             {% endif %}
 
                         </ul>
