@@ -125,20 +125,19 @@
                 <div class="head">我要学习</div>
                 <form class="rightform" id="jsStayForm">
                     <div>
-                        <img src="../images/rightform1.png"/>
+                        <img src="{% static 'images/rightform1.png' %}"/>
                         <input type="text" name="name" id="companyName" placeholder="名字" maxlength="25" />
                     </div>
                     <div>
-                        <img src="../images/rightform2.png"/>
+                        <img src="{% static 'images/rightform2.png' %}"/>
                         <input type="text" name="mobile" id="companyMobile" placeholder="联系电话"/>
                     </div>
                     <div>
-                        <img src="../images/rightform3.png"/>
+                        <img src="{% static 'images/rightform3.png' %}"/>
                         <input type="text" name="course_name" id="companyAddress" placeholder="课程名" maxlength="50" />
                     </div>
                     <p class="error company-tips" id="jsCompanyTips"></p>
-                    <input class="btn" type="text" id="jsStayBtn" value="立即咨询 >" />
-                    <input type='hidden' name='csrfmiddlewaretoken' value='5I2SlleZJOMUX9QbwYLUIAOshdrdpRcy' />
+                    <input class="btn" type="submit" id="jsStayBtn" value="立即咨询 >" />
                 </form>
             </div>
             {# 授课机构排名 - 按收藏数排序 #}
@@ -160,4 +159,48 @@
     </section>
 {% endblock %}
 
+
+{% block myjs %}
+   <script>
+        // 页面加载完成后执行
+        $(function () {
+            // 获取id为jsStayBtu的提交按钮
+            $("#jsStayBtn").click(function () {
+                // 获取form表单数据
+                var name = $("#companyName").val();
+                var phone = $("#companyMobile").val();
+                var course = $("#companyAddress").val();
+                // 发送ajax请求
+                $.ajax({
+                    url: "{% url 'operations:user_ask' %}",  // 发送请求
+                    data: {  // 请求数据
+                        'name': name,
+                        'phone': phone,
+                        'course': course,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    },
+                    type: "POST",  // 请求方式
+                    dataType: "json",  // 服务器响应数据类型
+                    success: function (data) {  // 请求成功后的服务器回调函数,data为响应数据
+                        if(data.status == 'ok'){  // 咨询成功
+                            alert(data.msg);
+                            // 重置标签数据
+                            $('#companyName').val('');
+                            $('#companyMobile').val('');
+                            $('#companyAddress').val('');
+                            $('#jsCompanyTips').text('');
+                        }else{  // 咨询失败
+                            alert(data.msg);
+                            $('#jsCompanyTips').text(data.msg);  // 数据验证失败返回的信息,即手机号验证失败
+                        }
+                    },
+                });
+                // 如果不想让submit有提交的动作,那么就需要在事件函数的最后返回false,阻止提交动作的发生
+                return false;
+            });
+        })
+
+   </script>
+
+{% endblock %}
 
