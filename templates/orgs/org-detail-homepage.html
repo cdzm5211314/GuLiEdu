@@ -15,83 +15,55 @@
             <h1>全部课程</h1>
             <a class="green fr more" href="org-detail-course.html">查看更多 > </a>
         </div>
+        {# 课程展示 #}
         <div class="brief group_list">
-
-            <div class="module1_5 box">
-                <a href="course-detail.html"><img width="214" src="{% static 'images/js基础.jpg' %}"/></a>
-                <div class="des">
-                    <a href="course-detail.html"><h2>javascript基础</h2></a>
-                    <span class="fl">课时：<i class="key">0</i></span>
-                    <span class="fr">参加人数：3</span>
-                </div>
-                <div class="bottom">
-                    <span class="fl">谷粒教育网</span>
-                    <span class="star fr  notlogin
+            {% for course in org.courseinfo_set.all %}
+                <div class="module1_5 box">
+                    <a href="course-detail.html"><img width="214" src="{{ MEDIA_URL }}{{ course.image }}"/></a>
+                    <div class="des">
+                        <a href="course-detail.html"><h2>{{ course.name }}</h2></a>
+                        <span class="fl">课时：<i class="key">{{ course.study_time }}</i></span>
+                        <span class="fr">参加人数：{{ course.study_num }}</span>
+                    </div>
+                    <div class="bottom">
+                        <span class="fl">{{ org.name }}</span>
+                        <span class="star fr  notlogin
                             " data-favid="13" data-fav-type="4">
-                            0
+                            {{ course.love_num }}
                         </span>
+                    </div>
                 </div>
-            </div>
-
-            <div class="module1_5 box">
-                <a href="course-detail.html"><img width="214" src="{% static 'images/js高级.jpg' %}"/></a>
-                <div class="des">
-                    <a href="course-detail.html"><h2>javascript高级</h2></a>
-                    <span class="fl">课时：<i class="key">0</i></span>
-                    <span class="fr">参加人数：0</span>
-                </div>
-                <div class="bottom">
-                    <span class="fl">谷粒教育网</span>
-                    <span class="star fr  notlogin
-                            " data-favid="13" data-fav-type="4">
-                            0
-                        </span>
-                </div>
-            </div>
-
-            <div class="module1_5 box">
-                <a href="course-detail.html"><img width="214" src="{% static 'images/jQuery.jpg' %}"/></a>
-                <div class="des">
-                    <a href="course-detail.html"><h2>jquery全讲</h2></a>
-                    <span class="fl">课时：<i class="key">0</i></span>
-                    <span class="fr">参加人数：0</span>
-                </div>
-                <div class="bottom">
-                    <span class="fl">谷粒教育网</span>
-                    <span class="star fr  notlogin
-                            " data-favid="13" data-fav-type="4">
-                            0
-                        </span>
-                </div>
-            </div>
-
+            {% endfor %}
 
         </div>
     </div>
+
     <div class="right companycenter layout">
+        {# 查询并遍历所有的老师信息 #}
+        {% for teacher in org.teacherinfo_set.all %}
         <div class="head">
             <h1>机构教师</h1>
             <a class="green fr more" href="org-detail-teachers.html">查看更多 > </a>
         </div>
-
+        {# 机构教师信息 #}
         <div class="diarys">
             <div class="module5 share company-diary-box" style="padding:10px 0;">
                 <div class="left">
-                    <img class="pic" src="{% static 'images/touxiang.jpg' %}"/>
-                    <p>昵称：weesmile</p>
+                    <img class="pic" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                    <p>昵称：{{ teacher.name }}</p>
                 </div>
                 <div class="right">
                     <div class="top">
                         <div class="fl">
-                            <a href=""><h1>django</h1></a>
-                            <span>发表于：2017-10-12</span>
+                            <a href=""><h1>{{ teacher.courseinfo_set.all.0 }}</h1></a>
+                            <span>发表于：{{ teacher.courseinfo_set.all.0.add_time }}</span>
                         </div>
                     </div>
-                    <div class="middle" style="border-bottom:0;">课程介绍</div>
+                    <div class="middle" style="border-bottom:0;">{{ teacher.courseinfo_set.all.0.desc }}</div>
                 </div>
             </div>
         </div>
-
+        {% endfor %}
 
     </div>
     <div class="right companycenter layout">
@@ -100,7 +72,7 @@
             <a class="green fr more" href="org-detail-desc.html">查看更多 > </a>
         </div>
         <div class="cont">
-            <p>我的机构</p>
+            <p>{{ org.desc }}</p>
         </div>
     </div>
 {% endblock %}
