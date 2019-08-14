@@ -17,7 +17,7 @@ def user_register(request):
     if request.method == 'GET':
         # 此处实例化forms类,目的不是为了验证,而是为了使用验证码
         user_register_form = UserRegisterForm()
-        return render(request, 'register.html',{'user_register_form':user_register_form})
+        return render(request, 'users/register.html',{'user_register_form':user_register_form})
     else:
         # 获取form注册表单数据
         user_register_form = UserRegisterForm(request.POST)
@@ -28,7 +28,7 @@ def user_register(request):
             # 到数据库查询注册的账号是否存在
             user_list = UserProfile.objects.filter(Q(username=email) | Q(email=email))
             if user_list:  # 注册的账号存在
-                return render(request, 'register.html', {'mgs': '用户已经存在!!!'})
+                return render(request, 'users/register.html', {'mgs': '用户已经存在!!!'})
             else:  # 注册的账号不存在
                 user = UserProfile()
                 user.username = email
@@ -39,7 +39,7 @@ def user_register(request):
                 return HttpResponse("请尽快登陆你的邮件进行账号激活,否则无法登陆...")
                 # return redirect(reverse('index'))
         else:  # 表单数据验证不合法
-            return render(request, 'register.html', {
+            return render(request, 'users/register.html', {
                 'user_register_form': user_register_form
             })
 
@@ -47,7 +47,7 @@ def user_register(request):
 # 登陆
 def user_login(request):
     if request.method == 'GET':
-        return render(request, 'login.html')
+        return render(request, 'users/login.html')
     else:
         # 获取form登陆表单数据
         user_login_form = UserLoginForm(request.POST)
@@ -66,9 +66,9 @@ def user_login(request):
                 else:
                     return HttpResponse("你的账号未被激活,请去邮箱激活,否则无法登陆...")
             else:
-                return render(request,'login.html',{'mgs':'用户名或密码错误'})
+                return render(request,'users/login.html',{'mgs':'用户名或密码错误'})
         else:
-            return render(request,'login.html',{'user_login_form':user_login_form})
+            return render(request,'users/login.html',{'user_login_form':user_login_form})
 
 # 退出
 def user_logout(request):
@@ -100,7 +100,7 @@ def user_forget(request):
     if request.method == "GET":
         # 此处实例化forms类,目的不是为了验证,而是为了使用验证码
         user_forget_form = UserForgetForm()
-        return render(request,'forgetpwd.html',{'user_forget_form':user_forget_form})
+        return render(request,'users/forgetpwd.html',{'user_forget_form':user_forget_form})
     else:
         # 获取提交的form表单数据
         user_forget_form = UserForgetForm(request.POST)
@@ -111,15 +111,15 @@ def user_forget(request):
                 send_mail_code(email,2)
                 return HttpResponse("请登陆邮箱重置您的密码!!!")
             else:  # 用户不存在
-                return render(request,'forgetpwd.html',{'msg':'用户不存在...'})
+                return render(request,'users/forgetpwd.html',{'msg':'用户不存在...'})
         else:  # 表单验证不通过
-            return render(request,'forgetpwd.html',{'user_forget_form':user_forget_form})
+            return render(request,'users/forgetpwd.html',{'user_forget_form':user_forget_form})
 
 # 重置密码
 def user_reset(request,code):
     if code:  #  是否获取到验证码
         if request.method == 'GET':
-            return render(request,'password_reset.html',{'code':code})
+            return render(request,'users/password_reset.html',{'code':code})
         else:  # post请求
             user_reset_form = UserResetForm(request.POST)
             if user_reset_form.is_valid():  # 验证数据
@@ -140,9 +140,9 @@ def user_reset(request,code):
                     else:  # 邮箱验证码数据不存在
                         pass
                 else:
-                    return render(request,'password_reset.html',{'msg':'两次密码输入不一致','code':code})
+                    return render(request,'users/password_reset.html',{'msg':'两次密码输入不一致','code':code})
             else:  # form表单数据验证不通过
-                return render(request,'password_reset.html',{'user_reset_form':user_reset_form,'code':code})
+                return render(request,'users/password_reset.html',{'user_reset_form':user_reset_form,'code':code})
     else:  # 未获取到邮箱验证码
         pass
 
