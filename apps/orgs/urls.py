@@ -12,5 +12,6 @@ urlpatterns = [
     # 机构详情页-机构介绍
     url(r'^org_detail_desc/(\d+)/$', views.org_detail_desc, name='org_detail_desc'),
     # 机构详情页-机构讲师
+    url(r'^org_detail_teacher/(\d+)/$', views.org_detail_teacher, name='org_detail_teacher'),
 
 ]
