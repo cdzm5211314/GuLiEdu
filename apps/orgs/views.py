@@ -53,9 +53,43 @@ def org_list(request):
         'sort':sort,
     })
 
-# 机构详情页
+# 机构详情页-机构首页
 def org_detail(request, org_id):
     if org_id:
         org = OrgInfo.objects.filter(id = int(org_id))[0]
         return render(request,'orgs/org-detail-homepage.html',{'org':org})
+
+# 机构详情页-机构课程
+def org_detail_course(request, org_id):
+    if org_id:
+        org = OrgInfo.objects.filter(id = int(org_id))[0]  # 根据id查询机构信息
+        # 根据机构信息对象 查所有 它下面所有的课程
+        all_orgs_course = org.courseinfo_set.all().order_by('id')  # order_by避免报分页警告信息
+
+        # 分页显示
+        page_num = request.GET.get('page_num','')  # 获取url传递过来的页码数值,默认值为1,可自定义
+        paginator = Paginator(all_orgs_course,2)  # 创建分页对象,设置每页显示几条数据
+        try:
+            pages = paginator.page(page_num)  # 获取页码值对应的分页对象
+        except PageNotAnInteger:  # 页码不是整数时引发该异常
+            pages = paginator.page(1)  # 获取第一页数据返回
+        except EmptyPage:  # 页码不在有效范围时(即数据为空,或参数页码值大于或小于页码范围)引发该异常
+            # pages = paginator.page(paginator.num_pages)
+            if int(page_num) > paginator.num_pages:
+                # 参数页码值大于总页码数: 获取最后一页数据返回
+                pages = paginator.page(paginator.num_pages)
+            else:
+                # 参数页码值小于最小页码数或为空时: 获取第一页数据返回
+                pages = paginator.page(1)
+
+        return render(request,'orgs/org-detail-course.html',{
+            'org':org,
+            'pages':pages,
+        })
+
+# 机构详情页-机构介绍
+
+
+# 机构详情页-机构讲师
+
 
