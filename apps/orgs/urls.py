@@ -10,7 +10,7 @@ urlpatterns = [
     # 机构详情页-机构课程
     url(r'^org_detail_course/(\d+)/$', views.org_detail_course, name='org_detail_course'),
     # 机构详情页-机构介绍
-
+    url(r'^org_detail_desc/(\d+)/$', views.org_detail_desc, name='org_detail_desc'),
     # 机构详情页-机构讲师
 
 ]

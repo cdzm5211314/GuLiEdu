@@ -47,7 +47,7 @@
                 <ul>
                     <li class="active2"><a href="{% url 'orgs:org_detail' org.id %}">机构首页</a></li>
                     <li class=""><a href="{% url 'orgs:org_detail_course' org.id %}">机构课程</a></li>
-                    <li class=""><a href="org-detail-desc.html">机构介绍</a></li>
+                    <li class=""><a href="{% url 'orgs:org_detail_desc' org.id %}">机构介绍</a></li>
                     <li class=""><a href="org-detail-teachers.html">机构讲师</a></li>
                 </ul>
             </div>

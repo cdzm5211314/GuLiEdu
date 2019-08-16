@@ -88,7 +88,11 @@ def org_detail_course(request, org_id):
         })
 
 # 机构详情页-机构介绍
+def org_detail_desc(request, org_id):
+    if org_id:
+        org = OrgInfo.objects.filter(id = int(org_id))[0]
 
+        return render(request,'orgs/org-detail-desc.html',{'org':org})
 
 # 机构详情页-机构讲师
 
