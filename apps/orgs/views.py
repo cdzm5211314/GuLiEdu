@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from orgs.models import OrgInfo, TeacherInfo, CityInfo
+from operations.models import UserLove
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
@@ -57,7 +58,19 @@ def org_list(request):
 def org_detail(request, org_id):
     if org_id:
         org = OrgInfo.objects.filter(id=int(org_id))[0]
-        return render(request, 'orgs/org-detail-homepage.html', {'org': org, 'detail_type':'home'})
+        # 返回数据的时候需要返回收藏这个机构的状态(收藏或取消收藏)
+        lovestatus = False
+        if request.user.is_authenticated():  # 判断用户是否登录
+            # 查看收藏表中是否有这条收藏记录数据
+            love = UserLove.objects.filter(love_man=request.user, love_id=int(org_id), love_type=1, love_status=True)
+            if love:
+                lovestatus = True  # 机构页面显示为取消收藏
+
+        return render(request, 'orgs/org-detail-homepage.html', {
+            'org': org,
+            'detail_type': 'home',
+            'lovestatus': lovestatus,
+        })
 
 
 # 机构详情页-机构课程
@@ -66,6 +79,14 @@ def org_detail_course(request, org_id):
         org = OrgInfo.objects.filter(id=int(org_id))[0]  # 根据id查询机构信息
         # 根据机构信息对象 查所有 它下面所有的课程
         all_orgs_course = org.courseinfo_set.all().order_by('id')  # order_by避免报分页警告信息
+
+        # 返回数据的时候需要返回收藏这个机构的状态(收藏或取消收藏)
+        lovestatus = False
+        if request.user.is_authenticated():  # 判断用户是否登录
+            # 查看收藏表中是否有这条收藏记录数据
+            love = UserLove.objects.filter(love_man=request.user, love_id=int(org_id), love_type=1, love_status=True)
+            if love:
+                lovestatus = True  # 机构页面显示为取消收藏
 
         # 分页显示
         page_num = request.GET.get('page_num', '')  # 获取url传递过来的页码数值,默认值为1,可自定义
@@ -86,7 +107,8 @@ def org_detail_course(request, org_id):
         return render(request, 'orgs/org-detail-course.html', {
             'org': org,
             'pages': pages,
-            'detail_type':'course',
+            'detail_type': 'course',
+            'lovestatus': lovestatus,
         })
 
 
@@ -95,12 +117,37 @@ def org_detail_desc(request, org_id):
     if org_id:
         org = OrgInfo.objects.filter(id=int(org_id))[0]
 
-        return render(request, 'orgs/org-detail-desc.html', {'org': org,'detail_type':'desc'})
+        # 返回数据的时候需要返回收藏这个机构的状态(收藏或取消收藏)
+        lovestatus = False
+        if request.user.is_authenticated():  # 判断用户是否登录
+            # 查看收藏表中是否有这条收藏记录数据
+            love = UserLove.objects.filter(love_man=request.user, love_id=int(org_id), love_type=1, love_status=True)
+            if love:
+                lovestatus = True  # 机构页面显示为取消收藏
+
+        return render(request, 'orgs/org-detail-desc.html', {
+            'org': org,
+            'detail_type': 'desc',
+            'lovestatus': lovestatus,
+        })
 
 
 # 机构详情页-机构讲师
 def org_detail_teacher(request, org_id):
     if org_id:
         org = OrgInfo.objects.filter(id=int(org_id))[0]
-        print(org,type(org))
-        return render(request, 'orgs/org-detail-teachers.html', {'org': org,'detail_type':'teacher'})
+        # print(org,type(org))
+
+        # 返回数据的时候需要返回收藏这个机构的状态(收藏或取消收藏)
+        lovestatus = False
+        if request.user.is_authenticated():  # 判断用户是否登录
+            # 查看收藏表中是否有这条收藏记录数据
+            love = UserLove.objects.filter(love_man=request.user, love_id=int(org_id), love_type=1, love_status=True)
+            if love:
+                lovestatus = True  # 机构页面显示为取消收藏
+
+        return render(request, 'orgs/org-detail-teachers.html', {
+            'org': org,
+            'detail_type': 'teacher',
+            'lovestatus': lovestatus,
+        })

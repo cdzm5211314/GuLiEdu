@@ -22,13 +22,13 @@
                     <span class="key">5.0</span>
                 </p>
             </div>
-            <div class="btn fr collectionbtn  notlogin" data-favid="22" data-fav-type="1">
-                收藏
+            <div id="love" class="btn fr collectionbtn  notlogin" data-favid="22" data-fav-type="1">
+                {% if lovestatus %} 取消收藏 {% else %} 收藏 {% endif %}
             </div>
 
         </div>
     </div>
-    </div>
+
 {% endblock %}
 
 {% block content %}
@@ -61,6 +61,7 @@
 {% block myjs %}
     <script type="text/javascript" src="{% static 'js/plugins/jquery.raty.js' %}"></script>
     <script type="text/javascript">
+        {# 页面加载完成 #}
         $(function () {
             var $precision = $('.precision'),
                 score = $precision.attr('data-star-scope'),
@@ -78,6 +79,29 @@
                     score: score
                 };
             $precision.raty(option);
+
+            {# 机构收藏类型功能 #}
+            $('#love').click(function () {
+                var loveid = {{ org.id }};
+                var lovetype = 1;  // 1 表示机构, 2 表示课程, 3 表示讲师
+                $.ajax({
+                    url: '{% url 'operations:user_love' %}',
+                    type: 'GET',
+                    data: {
+                        loveid: loveid,
+                        lovetype: lovetype,
+                    },
+                    success:function (callback) {
+                        if(callback.status == 'ok'){
+                            $('#love').text(callback.msg)
+                        }else{
+                            alert(callback.msg)
+                        }
+                    }
+
+                });
+            });
+
 
         })
     </script>
