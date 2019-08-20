@@ -63,7 +63,7 @@
                             </ul>
                             <div class="btns">
                                 <div class="btn colectgroupbtn"  id="jsLeftBtn">
-                                    收藏
+                                    {% if lovecourse %} 取消收藏 {% else %} 收藏 {% endif %}
                                 </div>
                                 <div class="buy btn"><a style="color: white" href="course-video.html">开始学习</a></div>
                             </div>
@@ -84,7 +84,7 @@
                         </a>
                         <div class="btn  notlogin
 					     "data-favid="14" id="jsRightBtn">
-                            已收藏
+                            {% if loveorg %} 取消收藏 {% else %} 收藏 {% endif %}
                         </div>
                         <div class="clear">
                             <ul>
@@ -140,3 +140,53 @@
     </section>
 {% endblock %}
 
+{% block myjs %}
+<script>
+ // 页面加载
+ $(function () {
+     // 课程详情页左边的课程收藏
+     $('#jsLeftBtn').click(function () {
+         var loveid = {{ course.id }};
+         var lovetype = 2;  // 2 表示课程收藏
+         $.ajax({
+             url: '{% url 'operations:user_love'%}',
+             type: 'GET',
+             data:{
+                 loveid: loveid,
+                 lovetype: lovetype,
+             },
+             success:function (callback) {
+                if (callback.status == 'ok'){
+                    $('#jsLeftBtn').text(callback.msg)
+                }else{
+                    alert(callback.msg)
+                }
+             }
+
+         });
+     });
+     // 课程详情页右边的机构收藏
+     $('#jsRightBtn').click(function () {
+         var loveid = {{ course.orginfo.id }};
+         var lovetype = 1;  // 1 表示机构收藏
+         $.ajax({
+             url: '{% url 'operations:user_love'%}',
+             type: 'GET',
+             data:{
+                 loveid: loveid,
+                 lovetype: lovetype,
+             },
+             success:function (callback) {
+                 if (callback.status == 'ok'){
+                     $('#jsRightBtn').text(callback.msg)
+                 }else{
+                     alert(callback.msg)
+                 }
+             }
+
+         });
+     });
+ });
+
+</script>
+{% endblock %}

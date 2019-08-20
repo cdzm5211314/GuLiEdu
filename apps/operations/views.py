@@ -15,7 +15,7 @@ def user_ask(request):
     else:
         return JsonResponse({'status': 'fail', 'msg': '咨询失败!!!'})
 
-# 机构收藏类型功能
+# 收藏类型功能(机构收藏,课程收藏,讲师收藏)
 def user_love(request):
     # 获取ajax请求参数
     loveid = request.GET.get('loveid','')
