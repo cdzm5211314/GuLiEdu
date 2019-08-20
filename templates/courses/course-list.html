@@ -32,18 +32,18 @@
                             <div class="group_list">
                                 {% for course in pages %}
                                     <div class="box">
-                                        <a href="course-detail.html">
+                                        <a href="{% url 'courses:course_detail' course.id %}">
                                             <img width="280" height="350" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
                                         </a>
                                         <div class="des">
-                                            <a href="course-detail.html">
+                                            <a href="{% url 'courses:course_detail' course.id %}">
                                                 <h2>{{ course.name }}</h2>
                                             </a>
                                             <span class="fl">时长：<i class="key">{{ course.study_time }}</i></span>
                                             <span class="fr">学习人数：{{ course.study_num }}&nbsp;&nbsp;</span>
                                         </div>
                                         <div class="bottom">
-                                            <a href="course-detail.html"><span class="fl">来自 {{ course.orginfo.name }}</span></a>
+                                            <a href="{% url 'courses:course_detail' course.id %}"><span class="fl">来自{{ course.orginfo.name }}</span></a>
                                             <span class="star fr  notlogin" data-favid="15">
                                         {{ course.love_num }}
                                         </span>
@@ -83,12 +83,12 @@
                             {% for course in recommend_courses %}
                             <dl>
                                 <dt>
-                                    <a target="_blank" href="">
+                                    <a target="_blank" href="{% url 'courses:course_detail' course.id %}">
                                         <img width="240" height="220" class="scrollLoading" src="{{ MEDIA_URL }}{{ course.image }}"/>
                                     </a>
                                 </dt>
                                 <dd>
-                                    <a target="_blank" href=""><h2>{{ course.name }}</h2></a>
+                                    <a target="_blank" href="{% url 'courses:course_detail' course.id %}"><h2>{{ course.name }}</h2></a>
                                     <span class="fl">难度：
                                         {% if course.level == 'cj' %}
                                         <i class="key">初级</i>

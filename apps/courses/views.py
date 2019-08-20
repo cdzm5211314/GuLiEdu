@@ -40,3 +40,18 @@ def course_list(request):
         'sort': sort,
 
     })
+
+# 公开课课程详情页
+def course_detail(request, course_id):
+    if course_id:
+        # 根据id查询课程信息
+        course = CourseInfo.objects.filter(id = int(course_id))[0]
+        # 根据类别查看相关课程信息
+        relate_course = CourseInfo.objects.filter(category=course.category).exclude(id=int(course_id))[0]
+
+        return render(request,'courses/course-detail.html',{
+            'course': course,
+            'relate_course':relate_course,
+        })
+
+
