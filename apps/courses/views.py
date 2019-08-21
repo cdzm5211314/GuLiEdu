@@ -83,7 +83,18 @@ def course_video(request, course_id):
             userCourse.study_man = request.user
             userCourse.save()
 
+        # 学过该课程的用户还学过哪些课程???(指当前用户还是学习该课程的所有用户)
+        # 1.从用户课程表(UserCourse)中查找到所有学习过该课程的 所有对象(用户课程)
+        usercourse_list = UserCourse.objects.filter(study_course=course)
+        # 2.根据查询得到的所有用户课程对象获取对应的用户信息列表
+        user_list = [usercourse.study_man for usercourse in usercourse_list]
+        # 3.根据获取到的用户信息列表查询用户学习的其他课程的 所有对象(用户课程)
+        usercourse_list = UserCourse.objects.filter(study_man__in=user_list).exclude(study_course=course)
+        # 4.从获取到的用户课程列表中获取所有课程列表
+        course_list = list(set([usercourse.study_course for usercourse in usercourse_list]))
+
         return render(request,'courses/course-video.html',{
             'course': course,
+            'course_list':course_list,
         })
 

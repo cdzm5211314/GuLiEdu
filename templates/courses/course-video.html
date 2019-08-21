@@ -153,21 +153,15 @@
                                     <div class="cp-tab-pannel js-comp-tab-pannel" data-pannel="course" style="display: block">
                                         <!-- img 200 x 112 -->
                                         <ul class="other-list">
-
+                                        {% for course in course_list|slice:":2" %}
+{#                                        {% for course in course_list %}#}
                                             <li class="curr">
-                                                <a href="course-detail.html" target="_blank">
-                                                    <img src="../images/mysql.jpg">
-                                                    <span class="name autowrap">mysql高级</span>
+                                                <a href="{% url 'courses:course_detail' course.id %}" target="_blank">
+                                                    <img src="{{ MEDIA_URL }}{{ course.image }}">
+                                                    <span class="name autowrap">{{ course.name }}</span>
                                                 </a>
                                             </li>
-
-                                            <li class="curr">
-                                                <a href="course-detail.html" target="_blank">
-                                                    <img src="../images/oracle.jpg">
-                                                    <span class="name autowrap">oracle全讲</span>
-                                                </a>
-                                            </li>
-
+                                        {% endfor %}
                                         </ul>
                                     </div>
 
