@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from operations.forms import UserAskForm
-from operations.models import UserLove
+from operations.forms import UserAskForm, UserCommentForm
+from operations.models import UserLove, UserComment
 from django.http import JsonResponse
-
+from courses.models import CourseInfo
 
 # Create your views here.
 
@@ -46,5 +46,28 @@ def user_love(request):
     else:  # 收藏id和收藏类型参数不存在
         return JsonResponse({'status':'fail', 'msg':'收藏失败'})
 
+# 用户评论
+def user_comment(request):
 
+    user_comment_form = UserCommentForm(request.POST)
+    if user_comment_form.is_valid():  # 验证评论数据
+        # 获取评论信息
+        course_id = user_comment_form.cleaned_data['course_id']
+        content = user_comment_form.cleaned_data['content']
+        # 提交评论信息到数据库
+        userComment = UserComment()
+        userComment.comment_content = content
+        userComment.comment_course_id = course_id
+        userComment.comment_man = request.user
+        userComment.save()
+
+        return JsonResponse({
+            'status':'ok',
+            'msg':'评论成功'
+        })
+    else:
+        return JsonResponse({
+            'status':'fail',
+            'msg':'评论失败'
+        })
 

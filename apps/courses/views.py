@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from courses.models import CourseInfo
-from operations.models import UserLove, UserCourse
+from operations.models import UserLove, UserCourse, UserComment
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
@@ -70,7 +70,7 @@ def course_detail(request, course_id):
             'loveorg': loveorg,
         })
 
-# 公开课课程视频页
+# 公开课课程视频-章节
 def course_video(request, course_id):
     if course_id:
         course = CourseInfo.objects.filter(id=int(course_id))[0]
@@ -97,4 +97,30 @@ def course_video(request, course_id):
             'course': course,
             'course_list':course_list,
         })
+
+# 公开课课程视频-评论
+def course_comment(request, course_id):
+
+    if course_id:
+        # 查询要评论的课程
+        course = CourseInfo.objects.filter(id=int(course_id))[0]
+        # 根据课程查询该课程下的所有评论
+        all_comment  = UserComment.objects.filter(comment_course=course).order_by('-add_time')
+
+        # 学过该课程的用户还学过哪些课程???(指当前用户还是学习该课程的所有用户)
+        # 1.从用户课程表(UserCourse)中查找到所有学习过该课程的 所有对象(用户课程)
+        usercourse_list = UserCourse.objects.filter(study_course=course)
+        # 2.根据查询得到的所有用户课程对象获取对应的用户信息列表
+        user_list = [usercourse.study_man for usercourse in usercourse_list]
+        # 3.根据获取到的用户信息列表查询用户学习的其他课程的 所有对象(用户课程)
+        usercourse_list = UserCourse.objects.filter(study_man__in=user_list).exclude(study_course=course)
+        # 4.从获取到的用户课程列表中获取所有课程列表
+        course_list = list(set([usercourse.study_course for usercourse in usercourse_list]))
+
+    return render(request,'courses/course-comment.html',{
+        'course':course,
+        'all_comment':all_comment,
+        'course_list':course_list,
+    })
+
 

@@ -29,7 +29,9 @@ class UserAskForm(forms.ModelForm):
         else:  # 匹配失败
             raise forms.ValidationError('手机号码不合法')
 
-
-
+# 课程评论的数据验证
+class UserCommentForm(forms.Form):
+    content = forms.CharField(required=True,min_length=1,max_length=225)
+    course_id = forms.IntegerField(required=True)
 
 

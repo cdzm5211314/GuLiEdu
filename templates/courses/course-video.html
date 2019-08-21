@@ -39,11 +39,11 @@
                         <span class="meta-value">
                             <strong>
                             {% if course.level == 'cj' %}
-                                <i class="key">初级</i>
+                                初级
                             {% elif course.level == 'zj' %}
-                                <i class="key">中级</i>
+                                中级
                             {% elif course.level == 'gj' %}
-                                <i class="key">高级</i>
+                                高级
                             {% endif %}
                             </strong>
                         </span>
@@ -70,8 +70,8 @@
                     <div class="content">
                         <div class="mod-tab-menu">
                             <ul class="course-menu clearfix">
-                                <li><a class="ui-tabs-active active" id="learnOn" href="course-video.html"><span>章节</span></a></li>
-                                <li><a id="commentOn" class="" href="course-comment.html"><span>评论</span></a></li>
+                                <li><a class="ui-tabs-active active" id="learnOn" href="{% url 'courses:course_video' course.id %}"><span>章节</span></a></li>
+                                <li><a id="commentOn" class="" href="{% url 'courses:course_comment' course.id %}"><span>评论</span></a></li>
                             </ul>
                         </div>
 
