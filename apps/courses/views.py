@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from courses.models import CourseInfo
-from operations.models import UserLove
+from operations.models import UserLove, UserCourse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
@@ -75,6 +75,13 @@ def course_video(request, course_id):
     if course_id:
         course = CourseInfo.objects.filter(id=int(course_id))[0]
 
+        # 当用户点击我要"开始学习",代表会把这条记录添加到UserCourse表中
+        userCourse_list = UserCourse.objects.filter(study_course=course, study_man=request.user)
+        if not userCourse_list:  # 表示用户之前并未学习这个课程,也未添加到UserCourse表
+            userCourse = UserCourse()
+            userCourse.study_course = course
+            userCourse.study_man = request.user
+            userCourse.save()
 
         return render(request,'courses/course-video.html',{
             'course': course,
