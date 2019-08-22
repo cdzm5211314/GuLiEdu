@@ -151,3 +151,40 @@ def org_detail_teacher(request, org_id):
             'detail_type': 'teacher',
             'lovestatus': lovestatus,
         })
+
+# 讲师列表
+def teacher_list(request):
+
+    # 查询所有讲师
+    all_teachers = TeacherInfo.objects.all().order_by('id')
+
+    # 排序-默认(id)和人气(点击量click_num)
+    sort = request.GET.get('sort','')
+    if sort:
+        all_teachers = all_teachers.order_by('-' + sort)
+
+    # 讲师分页
+    page_num = request.GET.get('page_num', '')  # 获取url传递过来的页码数值,默认值为1,可自定义
+    paginator = Paginator(all_teachers, 3)  # 创建分页对象,设置每页显示几条数据
+    try:
+        pages = paginator.page(page_num)  # 获取页码值对应的分页对象
+    except PageNotAnInteger:  # 页码不是整数时引发该异常
+        pages = paginator.page(1)  # 获取第一页数据返回
+    except EmptyPage:  # 页码不在有效范围时(即数据为空,或参数页码值大于或小于页码范围)引发该异常
+        # pages = paginator.page(paginator.num_pages)
+        if int(page_num) > paginator.num_pages:
+            # 参数页码值大于总页码数: 获取最后一页数据返回
+            pages = paginator.page(paginator.num_pages)
+        else:
+            # 参数页码值小于最小页码数或为空时: 获取第一页数据返回
+            pages = paginator.page(1)
+
+    # 讲师排行榜-根据点击量(click_num)或收藏量(love_num)排序
+    sort_teacher = all_teachers.order_by('-love_num')[:3]
+
+    return render(request,'orgs/teachers-list.html',{
+        'all_teachers':all_teachers,
+        'pages':pages,
+        'sort':sort,
+        'sort_teacher':sort_teacher,
+    })
