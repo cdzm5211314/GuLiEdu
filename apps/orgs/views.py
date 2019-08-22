@@ -193,14 +193,14 @@ def teacher_list(request):
 def teacher_detail(request, teacher_id):
 
     # 根据id查询讲师的信息
-    teacher = TeacherInfo.objects.filter(id=int(teacher_id))[0]
+    if teacher_id:
+        teacher = TeacherInfo.objects.filter(id=int(teacher_id))[0]
 
     # 讲师排行榜-根据点击量(click_num)或收藏量(love_num)排序
-    sort_teacher = TeacherInfo.objects.all().order_by('-love_num')[:3]
+    sort_teachers = TeacherInfo.objects.all().order_by('-love_num')[:3]
 
     # 根据讲师信息查询该讲师的所有课程信息
     all_courseinfo = teacher.courseinfo_set.all().order_by('id')
-    # 讲师的所有课程排序
     page_num = request.GET.get('page_num', '')  # 获取url传递过来的页码数值,默认值为1,可自定义
     paginator = Paginator(all_courseinfo, 3)  # 创建分页对象,设置每页显示几条数据
     try:
@@ -218,7 +218,7 @@ def teacher_detail(request, teacher_id):
 
     return render(request,'orgs/teacher-detail.html',{
         'teacher':teacher,
-        'sort_teacher':sort_teacher,
+        'sort_teachers':sort_teachers,
         'pages':pages,
     })
 
