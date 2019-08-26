@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="btn">
                                 <span class="fl btn1 collectionbtn" id="jsLeftBtn">
-                                     收藏
+                                     {% if loveteacher %} 取消收藏 {% else %} 收藏 {% endif %}
                                 </span>
                                     <span class="fr btn2 shareBtn bdsharebuttonbox">
                                     <span class="fl">分享</span>
@@ -137,7 +137,9 @@
                             <h2 class="center">{{ teacher.work_company.name }}</h2>
                         </a>
                         <p class="center tell">地址：{{ teacher.work_company.address }}</p>
-                        <a class="btn" id="jsRightBtn">收藏</a>
+                        <a class="btn" id="jsRightBtn">
+                            {% if loveorg %} 取消收藏 {% else %} 收藏 {% endif %}
+                        </a>
                     </div>
                 </div>
                 <div class="butler_detail_cont">
@@ -168,3 +170,54 @@
     </section>
 {% endblock %}
 
+{% block myjs %}
+{# 讲师详情页 收藏功能 #}
+    <script>
+        // 页面加载
+        $(function () {
+            // 课程详情页左边的课程收藏
+            $('#jsLeftBtn').click(function () {
+                var loveid = {{ teacher.id }};
+                var lovetype = 3;  // 3 表示讲师收藏
+                $.ajax({
+                    url: '{% url 'operations:user_love'%}',
+                    type: 'GET',
+                    data:{
+                        loveid: loveid,
+                        lovetype: lovetype,
+                    },
+                    success:function (callback) {
+                        if (callback.status == 'ok'){
+                            $('#jsLeftBtn').text(callback.msg)
+                        }else{
+                            alert(callback.msg)
+                        }
+                    }
+
+                });
+            });
+            // 课程详情页右边的机构收藏
+            $('#jsRightBtn').click(function () {
+                var loveid = {{ teacher.work_company.id }};
+                var lovetype = 1;  // 1 表示机构收藏
+                $.ajax({
+                    url: '{% url 'operations:user_love'%}',
+                    type: 'GET',
+                    data:{
+                        loveid: loveid,
+                        lovetype: lovetype,
+                    },
+                    success:function (callback) {
+                        if (callback.status == 'ok'){
+                            $('#jsRightBtn').text(callback.msg)
+                        }else{
+                            alert(callback.msg)
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+    
+{% endblock %}

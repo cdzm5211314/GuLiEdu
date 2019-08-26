@@ -199,7 +199,20 @@ def teacher_detail(request, teacher_id):
     # 讲师排行榜-根据点击量(click_num)或收藏量(love_num)排序
     sort_teachers = TeacherInfo.objects.all().order_by('-love_num')[:3]
 
-    # 根据讲师信息查询该讲师的所有课程信息
+    # loveteacher和loveorg 用来存储用户收藏这个东西的状态，在模板当中根据这个状态来确定页面加载时候，显示的是收藏还是取消收藏
+    loveteacher = False  # 讲师的收藏状态(页面显示)
+    loveorg = False  # 机构的收藏状态(页面显示)
+    if request.user.is_authenticated():  # 验证用户是否登录
+        # 根据讲师id,讲师类型,登录用户查询收藏表中是否存在这条记录
+        love = UserLove.objects.filter(love_id=int(teacher_id),love_type=3,love_man=request.user)
+        if love:
+            loveteacher = True
+        # 根据要机构id,机构类型,登录用户查询收藏表中是否存在这条记录
+        love = UserLove.objects.filter(love_id=teacher.work_company.id,love_type=1,love_man=request.user)
+        if love:
+            loveorg = True
+
+# 根据讲师信息查询该讲师的所有课程信息
     all_courseinfo = teacher.courseinfo_set.all().order_by('id')
     page_num = request.GET.get('page_num', '')  # 获取url传递过来的页码数值,默认值为1,可自定义
     paginator = Paginator(all_courseinfo, 3)  # 创建分页对象,设置每页显示几条数据
@@ -220,5 +233,7 @@ def teacher_detail(request, teacher_id):
         'teacher':teacher,
         'sort_teachers':sort_teachers,
         'pages':pages,
+        'loveteacher':loveteacher,
+        'loveorg':loveorg,
     })
 
