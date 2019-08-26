@@ -47,6 +47,11 @@ def course_detail(request, course_id):
     if course_id:
         # 根据id查询课程信息
         course = CourseInfo.objects.filter(id = int(course_id))[0]
+
+        # 课程详情页访问一次 访问量+1
+        course.click_num += 1
+        course.save()
+
         # 根据类别查看相关课程信息
         relate_course = CourseInfo.objects.filter(category=course.category).exclude(id=int(course_id))[0]
 

@@ -58,6 +58,11 @@ def org_list(request):
 def org_detail(request, org_id):
     if org_id:
         org = OrgInfo.objects.filter(id=int(org_id))[0]
+
+        # 机构详情页访问一次 访问量+1
+        org.click_num += 1
+        org.save()
+
         # 返回数据的时候需要返回收藏这个机构的状态(收藏或取消收藏)
         lovestatus = False
         if request.user.is_authenticated():  # 判断用户是否登录
@@ -195,6 +200,10 @@ def teacher_detail(request, teacher_id):
     # 根据id查询讲师的信息
     if teacher_id:
         teacher = TeacherInfo.objects.filter(id=int(teacher_id))[0]
+
+        # 讲师详情页访问一次 访问量+1
+        teacher.click_num += 1
+        teacher.save()
 
     # 讲师排行榜-根据点击量(click_num)或收藏量(love_num)排序
     sort_teachers = TeacherInfo.objects.all().order_by('-love_num')[:3]
