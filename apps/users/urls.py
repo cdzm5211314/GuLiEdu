@@ -17,4 +17,6 @@ urlpatterns = [
     # 重置密码
     url(r'^user_reset/(\w+)$', views.user_reset, name='user_reset'),
 
+    # 个人用户中心
+    url(r'^user_info/$', views.user_info, name='user_info'),
 ]

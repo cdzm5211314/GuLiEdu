@@ -146,3 +146,7 @@ def user_reset(request,code):
     else:  # 未获取到邮箱验证码
         pass
 
+# 个人用户中心
+def user_info(requests):
+
+    return render(requests,'users/usercenter-info.html')
