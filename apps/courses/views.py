@@ -88,6 +88,16 @@ def course_video(request, course_id):
             userCourse.study_man = request.user
             userCourse.save()
 
+            # 从学习课程表中查找该用户学习的所有课程
+            usercourse_list = UserCourse.objects.filter(study_man=request.user)
+            course_list = [usercourse.study_course for usercourse in usercourse_list]
+            # 根据获取到课程列表,找到该课程所属机构
+            org_list = list(set([course.orginfo for course in course_list]))
+            # 当学习的该课程所属机构 不在 此人学习课程的所机构中, 则机构学习人数动态+1
+            if course.orginfo not in org_list:
+                course.orginfo.study_num += 1
+                course.orginfo.save()
+
         # 学过该课程的用户还学过哪些课程???(指当前用户还是学习该课程的所有用户)
         # 1.从用户课程表(UserCourse)中查找到所有学习过该课程的 所有对象(用户课程)
         usercourse_list = UserCourse.objects.filter(study_course=course)
