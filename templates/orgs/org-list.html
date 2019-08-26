@@ -86,7 +86,7 @@
                                         <li class="pic10" style="padding-left:18px;">经典课程：
                                         {#  反向查询机构下的所有课程,并使用过滤器切片操作 获取两个课程 #}
                                         {% for course in org.courseinfo_set.all|slice:':2' %}
-                                            <a href="/diary/19/">{{ course.name }}</a>
+                                            <a href="{% url 'courses:course_detail' course.id %}">{{ course.name }}</a>
                                         {% endfor %}
 
                                         </li>
@@ -145,7 +145,7 @@
                 <div class="head">授课机构排名</div>
                 {% for org in sort_orgs %}
                     <dl class="des">
-                        <dt class="num fl">1</dt>
+                        <dt class="num fl">{{ forloop.counter }}</dt>
                         <dd>
                             <a href="{% url 'orgs:org_detail' org.id %}"><h1>{{ org.name }}</h1></a>
                             <p>{{ org.address }}</p>
