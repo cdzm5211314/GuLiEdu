@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
 from .forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm
 from users.models import UserProfile,EmailVerifyCode
+from users.forms import UserChangeimageForm
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from tools.send_email_tool import send_mail_code
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -146,7 +148,22 @@ def user_reset(request,code):
     else:  # 未获取到邮箱验证码
         pass
 
-# 个人用户中心
+# 个人用户中心-个人资料
 def user_info(requests):
 
     return render(requests,'users/usercenter-info.html')
+
+# 个人用户中心-修改用户头像
+def user_changeimage(request):
+    # request.POST 验证图片文件以外的其他内容
+    # request.FILES 验证图片文件
+    # instance 指明实例是什么,做修改的时候,我们需要知道给哪个对象实例进行修改
+    # instance 如果不指明,就会当做创建对象去执行,而我们只有一个图片,就会报错
+    user_changeimage_form = UserChangeimageForm(request.POST,request.FILES,instance=request.user)
+    if user_changeimage_form.is_valid():
+        user_changeimage_form.save(commit=True)
+        return JsonResponse({'status':'ok'})
+    else:
+        return JsonResponse({'status':'fail'})
+
+
