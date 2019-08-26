@@ -31,7 +31,7 @@
         <div class="wp list personal_list">
             <div class="left">
                 <ul>
-                    <li class="active2"><a href="usercenter-info.html">个人资料</a></li>
+                    <li class="active2"><a href="{% url 'users:user_info' %}">个人资料</a></li>
                     <li ><a href="usercenter-mycourse.html">我的课程</a></li>
                     <li ><a href="usercenter-fav-course.html">我的收藏</a></li>
                     <li >
@@ -51,7 +51,7 @@
         <div class="dialog" id="jsDialog">
             <div class="resetpwdbox dialogbox" id="jsResetDialog">
                 <h1>修改密码</h1>
-                <div class="close jsCloseDialog"><img src="../images/dig_close.png"/></div>
+                <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"/></div>
                 <div class="cont">
                     <form id="jsResetPwdForm" autocomplete="off">
                         <div class="box">
@@ -73,7 +73,7 @@
             </div>
             <div class="dialogbox changeemai1 changephone" id="jsChangeEmailDialog">
                 <h1>修改邮箱</h1>
-                <div class="close jsCloseDialog"><img src="../images/dig_close.png"/></div>
+                <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"/></div>
                 <p>请输入新的邮箱地址</p>
                 <form id="jsChangeEmailForm" autocomplete="off">
                     <div class="box">
