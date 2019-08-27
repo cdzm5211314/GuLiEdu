@@ -85,7 +85,7 @@
                     </div>
                     <div class="error btns change_email_tips" id="jsChangeEmailTips" >请输入...</div>
                     <div class="button">
-                        <input class="changeemai_btn" id="jsChangeEmailBtn" type="button" value="完成"/>
+                        <input class="changeemai_btn" id="jsChangeEmailBt" type="button" value="完成"/>
                     </div>
                     <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />
                     <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />
@@ -106,7 +106,7 @@
     <script>
         {# 页面加载完成 #}
         $(function () {
-            {# 修改邮箱-获取邮箱验证码 #}
+            {# 修改邮箱-发送邮箱验证码 #}
             $('#jsChangeEmailCodeBt').click(function () {
                 var email = $('#jsChangeEmail').val();
                 $.ajax({
@@ -120,7 +120,32 @@
                         alert(callback.msg);
                     }
                 })
-            })
+            });
+
+            {# 完成邮箱修改功能 #}
+            $('#jsChangeEmailBt').click(function () {
+                var email = $('#jsChangeEmail').val();
+                var code = $('#jsChangeEmailCode').val();
+                $.ajax({
+                    type:'POST',
+                    url:'{% url 'users:user_resetemail' %}',
+                    data:{
+                        email:email,
+                        code:code,
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },
+                    success:function (callback) {
+                        if(callback.status == 'ok'){
+                            alert(callback.msg);
+                            window.location.reload();  // 页面刷新
+                            window.location.href = '{% url 'users:user_login' %}';  // 页面跳转
+                        }else{
+                            alert(callback.msg);
+                        }
+
+                    }
+                })
+            });
         })
     </script>
     

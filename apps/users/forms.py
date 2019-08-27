@@ -5,7 +5,7 @@
 
 from django import forms
 from captcha.fields import CaptchaField
-from users.models import UserProfile
+from users.models import UserProfile,EmailVerifyCode
 
 # 注册表单类
 class UserRegisterForm(forms.Form):
@@ -61,9 +61,15 @@ class UserChangeInfoForm(forms.ModelForm):
         model = UserProfile
         fields = ['nick_name','birthday','gender','address','phone']
 
-# 个人用户中心-修改用户邮箱-获取验证码
+# 个人用户中心-修改用户邮箱-发送验证码
 class UserChangeEmailForm(forms.ModelForm):
     class Meta:
-        model = UserProfile
+        # model = UserProfile
+        model = EmailVerifyCode
         fields = ['email']
 
+# 个人用户中心-修改用户邮箱-完成
+class UserResetEmailForm(forms.ModelForm):
+    class Meta:
+        model = EmailVerifyCode
+        fields = ['email','code']

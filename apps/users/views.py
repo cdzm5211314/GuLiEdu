@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
-from users.forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm,UserChangeimageForm,UserChangeInfoForm,UserChangeEmailForm
+from users.forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm,UserChangeimageForm,UserChangeInfoForm,UserChangeEmailForm,UserResetEmailForm
 from users.models import UserProfile,EmailVerifyCode
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
@@ -202,5 +202,29 @@ def user_changeemail(request):
                 return JsonResponse({'status':'ok','msg':'请去你的新邮箱中获取验证码'})
     else:  # 输入的邮箱信息未通过验证
         return JsonResponse({'status':'fail','msg':'输入邮箱信息错误'})
+
+# 个人用户中心-修改用户邮箱-完成
+def user_resetemail(request):
+
+    user_resetemail_form = UserResetEmailForm(request.POST)
+    if user_resetemail_form.is_valid():
+        email = user_resetemail_form.cleaned_data['email']
+        code = user_resetemail_form.cleaned_data['code']
+
+        email_ver_list = EmailVerifyCode.objects.filter(email=email,code=code,)  # 查找新邮箱与新邮箱验证码是否在数据表中存在这个对象
+        if email_ver_list:
+            email_ver = email_ver_list[0]
+            if (datetime.now() - email_ver.add_time).seconds < 60:  # 说明验证码还未过期
+                request.user.username = email
+                request.user.email = email
+                request.user.save()
+                return JsonResponse({'status':'ok','msg':'新邮箱修改成功'})
+            else:  # 大于60秒
+                return JsonResponse({'status':'fail','msg':'验证码已过期,请重新发送验证码'})
+        else:  # 未在数据库表中查找到数据
+            return JsonResponse({'status':'fail','msg':'邮箱或验证码输入错误'})
+    else:  # 数据未通过验证
+        return JsonResponse({'status':'fail','msg':'邮箱或验证码不合法'})
+
 
 
