@@ -246,7 +246,7 @@ def user_loveorg(request):
     # 根据登陆用户查找 用户收藏表的所有信息  然后在根据 类型 筛选出收藏信息(机构)
     # userloveorg_list = request.user.userlove_set.all()
     # 直接从 用户收藏表 中根据登陆用户于类型字典  查找到需要的收藏信息(机构)
-    userloveorg_list = UserLove.objects.filter(love_man=request.user,love_type=1)
+    userloveorg_list = UserLove.objects.filter(love_man=request.user,love_type=1,love_status=True)
 
     # 根据收藏信息获取到收藏id(机构)
     org_ids = [userloveorg.love_id for userloveorg in  userloveorg_list]

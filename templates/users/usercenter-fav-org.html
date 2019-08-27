@@ -42,7 +42,7 @@
 
                             </div>
                             <span class="c8 clear">{{ org.address }}</span>
-                            <div class="delete jsDeleteFav_org" data-favid="1"></div>
+                            <div class="delete jsDeleteFav_org" data-favid="{{ org.id }}"></div>
                         </dd>
                     </dl>
                 {% endfor %}
@@ -53,5 +53,39 @@
     </div>
 {% endblock %}
 
+{% block user %}{% endblock %}
+
+{% block myjs1 %}
+<script>
+    // 页面加载完成
+    $(function () {
+        $('.delete').click(function () {
+            {# prop()用来取元素自带属性的值或者设置值,attr()用来取元素自定义的属性的值或者设置值 #}
+            var loveid = $(this).attr('data-favid');
+            var lovetype = 1;  // 1表示机构类型
+            var obj = $(this);
+            $.ajax({
+                type:'GET',
+                url:'{% url 'operations:user_deletelove' %}',
+                data:{
+                    loveid:loveid,
+                    lovetype:lovetype,
+                },
+                success:function (callback) {
+                    if (callback.status == 'ok'){
+                        alert(callback.msg);
+                        {# window.location.reload();  // 取消收藏后页面刷新 #}
+                        {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 然后在删除div 页面不刷新#}
+                        obj.parents('.des').remove();
+                    } else{
+                        alert(callback.msg);
+                    }
+                }
+            })
+        });
+    })
+
+</script>
+{% endblock %}
 
 

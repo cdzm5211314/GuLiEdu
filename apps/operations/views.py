@@ -91,3 +91,21 @@ def user_comment(request):
             'msg':'评论失败'
         })
 
+# 取消收藏类型功能(机构收藏,课程收藏,讲师收藏)
+def user_deletelove(request):
+
+    loveid = request.GET.get('loveid','')
+    lovetype = request.GET.get('lovetype','')
+
+    if loveid and lovetype:
+        love = UserLove.objects.filter(love_id=int(loveid),love_type=int(lovetype),love_man=request.user,love_status=True)
+        if love:
+            love[0].love_status = False
+            love[0].save()
+            return JsonResponse({'status':'ok','msg':'取消收藏成功'})
+        else:
+            # pass
+            return JsonResponse({'status':'fail','msg':'取消收藏失败'})
+    else:
+        return JsonResponse({'status':'fail','msg':'取消收藏失败'})
+
