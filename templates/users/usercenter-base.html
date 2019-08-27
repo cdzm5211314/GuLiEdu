@@ -137,7 +137,7 @@
                     success:function (callback) {
                         if(callback.status == 'ok'){
                             alert(callback.msg);
-                            window.location.reload();  // 页面刷新
+                            // window.location.reload();  // 页面刷新
                             window.location.href = '{% url 'users:user_login' %}';  // 页面跳转
                         }else{
                             alert(callback.msg);
