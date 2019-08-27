@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
-from users.forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm,UserChangeimageForm,UserChangeInfoForm
+from users.forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm,UserChangeimageForm,UserChangeInfoForm,UserChangeEmailForm
 from users.models import UserProfile,EmailVerifyCode
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from tools.send_email_tool import send_mail_code
 from django.http import JsonResponse
+from datetime import datetime
 
 # Create your views here.
 
@@ -173,5 +174,33 @@ def user_changeinfo(request):
         return JsonResponse({'status':'ok','msg':'修改成功'})
     else:
         return JsonResponse({'status':'fail','msg':'修改失败'})
+
+# 个人用户中心-修改用户邮箱-获取验证码
+def user_changeemail(request):
+    user_changeemail_form = UserChangeEmailForm(request.POST)
+    if user_changeemail_form.is_valid():  # 验证输入的新邮箱数据
+        email = user_changeemail_form.cleaned_data['email']  # 获取新邮箱
+
+        email_list = UserProfile.objects.filter(Q(email=email)|Q(username=email))  # 查询新的邮箱是否在数据库表中
+        if email_list:  # 说明这个新邮箱已在数据库中,则无法使用
+            return JsonResponse({'status':'fail','msg':'此邮箱已被绑定'})
+        else:  # 说明这个新邮箱不在数据库中,可以使用
+            # 在发送邮件验证码之前,应该去邮箱验证码表中查找,看看之前有没有往当前这个新邮箱发送过修改邮箱这个类型的验证码
+            email_ver_list = EmailVerifyCode.objects.filter(email=email,send_type=3)
+            if email_ver_list:  # 说明发送过验证码,那么需要获取到新近发送这个一个验证码时间
+                email_ver = email_ver_list.order_by('-add_time')[0]
+                # 判断当前时间与最近发送的验证码添加时间之差
+                if (datetime.now() - email_ver.add_time).seconds > 60:  # 表示距离上次发送验证码时间大于60秒,可以再次发送
+                    send_mail_code(email,3)
+                    # 如果我们重新发送了新的验证码,那么以前最近发的就可以清楚掉
+                    email_ver.delete()
+                    return JsonResponse({'status':'ok','msg':'请去你的新邮箱中获取验证码'})
+                else:  # 小于60秒,不需要再次发送验证码
+                    return JsonResponse({'status':'fail','msg':'请不要重发发送验证码,60秒后再试'})
+            else:  # 未发送过验证码
+                send_mail_code(email,3)
+                return JsonResponse({'status':'ok','msg':'请去你的新邮箱中获取验证码'})
+    else:  # 输入的邮箱信息未通过验证
+        return JsonResponse({'status':'fail','msg':'输入邮箱信息错误'})
 
 

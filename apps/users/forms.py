@@ -61,5 +61,9 @@ class UserChangeInfoForm(forms.ModelForm):
         model = UserProfile
         fields = ['nick_name','birthday','gender','address','phone']
 
-
+# 个人用户中心-修改用户邮箱-获取验证码
+class UserChangeEmailForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['email']
 

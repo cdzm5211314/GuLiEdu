@@ -26,5 +26,7 @@ urlpatterns = [
     url(r'^user_changeimage/$', views.user_changeimage, name='user_changeimage'),
     # 个人用户中心-修改用户信息
     url(r'^user_changeinfo/$', views.user_changeinfo, name='user_changeinfo'),
+    # 个人用户中心-修改用户邮箱-获取验证码
+    url(r'^user_changeemail/$', views.user_changeemail, name='user_changeemail'),
 
 ]

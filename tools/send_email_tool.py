@@ -29,8 +29,8 @@ def send_mail_code(email,send_type):
     # EMAIL_HOST = 'smtp.163.com'                      # smpt服务地址
     # EMAIL_PORT = 25                                  # 端口号
     # EMAIL_HOST_USER = 'configureadmin@163.com'       # 发送邮件的邮箱地址即发件人
-    # EMAIL_HOST_PASSWORD = 'asdfghjkl123456'          # 发送邮件的邮箱[即发件人]中设置的客户端授权密码
-    # EMAIL_FROM = '天天生鲜<configureadmin@163.com>'  # 收件人看到的发件人
+    # EMAIL_HOST_PASSWORD = 'asdfghjkl******'          # 发送邮件的邮箱[即发件人]中设置的客户端授权密码
+    # EMAIL_FROM = '谷粒教育<configureadmin@163.com>'  # 收件人看到的发件人
 
     ## 3.发送邮件的具体内容信息
     # 激活用户
@@ -43,7 +43,14 @@ def send_mail_code(email,send_type):
     # 重置密码
     if send_type == 2:
         send_title = "谷粒教育重置密码系统:"
-        send_body = "请点击以下链接进行重置密码: \n http://127.0.0.1:8000/users/user_reset/" + code
+        send_body = "请点击以下链接,进行重置密码: \n http://127.0.0.1:8000/users/user_reset/" + code
+        # 发送邮件
+        send_mail(send_title,send_body,settings.EMAIL_FROM,[email])
+
+    # 修改邮箱-获取验证码
+    if send_type == 3:
+        send_title = "谷粒教育重置邮箱验证码:"
+        send_body = "你的邮箱验证码是: " + code
         # 发送邮件
         send_mail(send_title,send_body,settings.EMAIL_FROM,[email])
 
