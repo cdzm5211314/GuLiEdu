@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
-from .forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm
+from users.forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm,UserChangeimageForm,UserChangeInfoForm
 from users.models import UserProfile,EmailVerifyCode
-from users.forms import UserChangeimageForm
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from tools.send_email_tool import send_mail_code
@@ -165,5 +164,14 @@ def user_changeimage(request):
         return JsonResponse({'status':'ok'})
     else:
         return JsonResponse({'status':'fail'})
+
+# 个人用户中心-修改用户信息
+def user_changeinfo(request):
+    user_changeinfo_form = UserChangeInfoForm(request.POST,instance=request.user)
+    if user_changeinfo_form.is_valid():
+        user_changeinfo_form.save(commit=True)
+        return JsonResponse({'status':'ok','msg':'修改成功'})
+    else:
+        return JsonResponse({'status':'fail','msg':'修改失败'})
 
 

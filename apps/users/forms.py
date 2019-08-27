@@ -55,5 +55,11 @@ class UserChangeimageForm(forms.ModelForm):
         model = UserProfile
         fields = ['image']
 
+# 个人用户中心-修改用户信息
+class UserChangeInfoForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['nick_name','birthday','gender','address','phone']
+
 
 

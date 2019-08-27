@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^user_info/$', views.user_info, name='user_info'),
     # 个人用户中心-修改用户头像
     url(r'^user_changeimage/$', views.user_changeimage, name='user_changeimage'),
-
+    # 个人用户中心-修改用户信息
+    url(r'^user_changeinfo/$', views.user_changeinfo, name='user_changeinfo'),
 
 ]
