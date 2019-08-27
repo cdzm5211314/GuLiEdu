@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from tools.send_email_tool import send_mail_code
 from django.http import JsonResponse
 from datetime import datetime
+from operations.models import UserLove
+from orgs.models import OrgInfo
 
 # Create your views here.
 
@@ -237,3 +239,23 @@ def user_course(request):
     return render(request,'users/usercenter-mycourse.html',{
         'course_list':course_list,
     })
+
+# 个人用户中心-我的收藏(机构1,课程2,讲师3)
+def user_loveorg(request):
+
+    # 根据登陆用户查找 用户收藏表的所有信息  然后在根据 类型 筛选出收藏信息(机构)
+    # userloveorg_list = request.user.userlove_set.all()
+    # 直接从 用户收藏表 中根据登陆用户于类型字典  查找到需要的收藏信息(机构)
+    userloveorg_list = UserLove.objects.filter(love_man=request.user,love_type=1)
+
+    # 根据收藏信息获取到收藏id(机构)
+    org_ids = [userloveorg.love_id for userloveorg in  userloveorg_list]
+
+    # 根据收藏id查找到机构信息
+    org_list = OrgInfo.objects.filter(cityinfo_id__in=org_ids)
+
+    return render(request,'users/usercenter-fav-org.html',{
+        'org_list':org_list,
+    })
+
+
