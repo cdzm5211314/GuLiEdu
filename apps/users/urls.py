@@ -30,5 +30,8 @@ urlpatterns = [
     url(r'^user_changeemail/$', views.user_changeemail, name='user_changeemail'),
     # 个人用户中心-修改用户邮箱-完成
     url(r'^user_resetemail/$', views.user_resetemail, name='user_resetemail'),
+    # 个人用户中心-我的课程
+    url(r'^user_course/$', views.user_course, name='user_course'),
+
 
 ]

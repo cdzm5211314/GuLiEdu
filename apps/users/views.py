@@ -226,5 +226,14 @@ def user_resetemail(request):
     else:  # 数据未通过验证
         return JsonResponse({'status':'fail','msg':'邮箱或验证码不合法'})
 
+# 个人用户中心-我的课程
+def user_course(request):
 
+    # 根据登陆用户信息 查找 用户课程表的数据
+    usercourse_list = request.user.usercourse_set.all()
+    # 在根据用户课程表 信息 获取到所有的 课程信息
+    course_list = [usercourse.study_course for usercourse in usercourse_list]
 
+    return render(request,'users/usercenter-mycourse.html',{
+        'course_list':course_list,
+    })
