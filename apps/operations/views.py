@@ -4,6 +4,7 @@ from operations.models import UserLove, UserComment
 from orgs.models import OrgInfo,TeacherInfo
 from courses.models import CourseInfo
 from django.http import JsonResponse
+from tools.decorators import login_decorators
 
 # Create your views here.
 
@@ -17,6 +18,7 @@ def user_ask(request):
         return JsonResponse({'status': 'fail', 'msg': '咨询失败!!!'})
 
 # 收藏类型功能(机构收藏,课程收藏,讲师收藏)
+@login_decorators
 def user_love(request):
     # 获取ajax请求参数
     loveid = request.GET.get('loveid','')  # 收藏对象的ID

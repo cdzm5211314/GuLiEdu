@@ -77,7 +77,7 @@ def user_login(request):
             password = user_login_form.cleaned_data['password']
             # 验证用户信息,正确返回True
             user = authenticate(username=email, password=password)
-            print(user)
+            # print(user)
             if user:
                 # 判断用户是否被激活,如果没激活则无法登陆
                 if user.is_start:  # 已激活
@@ -88,7 +88,12 @@ def user_login(request):
                     userMessage.message_content = '欢迎登陆...'
                     userMessage.save()
 
-                    return redirect(reverse('index'))
+                    # 访问需要登录用户的url,在登陆后接着访问之前的url
+                    url = request.COOKIES.get('url','/')
+                    result = redirect(url)
+                    result.delete_cookie('url')
+                    return result
+                    # return redirect(reverse('index'))
                 else:
                     return HttpResponse("你的账号未被激活,请去邮箱激活,否则无法登陆...")
             else:

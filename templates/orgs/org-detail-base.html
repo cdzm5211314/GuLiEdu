@@ -94,7 +94,9 @@
                     success:function (callback) {
                         if(callback.status == 'ok'){
                             $('#love').text(callback.msg)
-                        }else{
+                        }else if (callback.status == 'nologin') {  // 未登录
+                            window.location.href = '{% url 'users:user_login' %}'
+                        } else{
                             alert(callback.msg)
                         }
                     }

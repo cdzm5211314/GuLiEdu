@@ -3,7 +3,8 @@ from courses.models import CourseInfo
 from operations.models import UserLove, UserCourse, UserComment
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-
+from django.contrib.auth.decorators import login_required  # 登陆装饰器
+from tools.decorators import login_decorators  # 自定义登陆装饰器
 # Create your views here.
 
 # 公开课列表
@@ -82,6 +83,8 @@ def course_detail(request, course_id):
         })
 
 # 公开课课程视频-章节
+# @login_required(login_url='/users/user_login/')  # 登陆验证装饰器,未登陆不能访问,跳转到登陆页面,缺点:登陆后会跳转到首页
+@login_decorators
 def course_video(request, course_id):
     if course_id:
         course = CourseInfo.objects.filter(id=int(course_id))[0]
