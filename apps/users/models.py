@@ -27,9 +27,13 @@ class UserProfile(AbstractUser):
     is_start = models.BooleanField(default=False,verbose_name="是否激活")
     add_time = models.DateTimeField(default=datetime.now,verbose_name="添加时间")
 
-
     def __str__(self):
         return self.username
+
+    def get_message_counter(self):  # 在用户模型类中定义方法,用来统计用户的未读消息个数
+        from operations.models import UserMessage
+        counter = UserMessage.objects.filter(message_man=self.id,message_status=False).count()  # 统计未读消息
+        return counter
 
     class Meta:
         verbose_name = '用户信息'
