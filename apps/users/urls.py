@@ -32,7 +32,11 @@ urlpatterns = [
     url(r'^user_resetemail/$', views.user_resetemail, name='user_resetemail'),
     # 个人用户中心-我的课程
     url(r'^user_course/$', views.user_course, name='user_course'),
-    # 个人用户中心-我的收藏(机构1,课程2,讲师3)
+    # 个人用户中心-我的收藏(机构1)
     url(r'^user_loveorg/$', views.user_loveorg, name='user_loveorg'),
+    # 个人用户中心-我的收藏(讲师3)
+    url(r'^user_loveteacher/$', views.user_loveteacher, name='user_loveteacher'),
+    # 个人用户中心-我的收藏(课程2)
+    url(r'^user_lovecourse/$', views.user_lovecourse, name='user_lovecourse'),
 
 ]

@@ -60,11 +60,11 @@ def course_detail(request, course_id):
         loveorg = False  # 机构的收藏状态(页面显示)
         if request.user.is_authenticated():  # 验证用户是否登录
             # 根据要课程id,课程类型,登录用户查询收藏表中是否存在这条记录
-            love = UserLove.objects.filter(love_id=int(course_id),love_type=2,love_man=request.user)
+            love = UserLove.objects.filter(love_id=int(course_id),love_type=2,love_status=True,love_man=request.user)
             if love:
                 lovecourse = True
             # 根据要机构id,机构类型,登录用户查询收藏表中是否存在这条记录
-            love = UserLove.objects.filter(love_id=course.orginfo.id,love_type=1,love_man=request.user)
+            love = UserLove.objects.filter(love_id=course.orginfo.id,love_type=1,love_status=True,love_man=request.user)
             if love:
                 loveorg = True
 

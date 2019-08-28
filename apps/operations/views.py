@@ -91,7 +91,7 @@ def user_comment(request):
             'msg':'评论失败'
         })
 
-# 取消收藏类型功能(机构收藏,课程收藏,讲师收藏)
+# 取消收藏类型功能(机构收藏1,课程收藏2,讲师收藏3)
 def user_deletelove(request):
 
     loveid = request.GET.get('loveid','')

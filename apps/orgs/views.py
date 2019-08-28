@@ -213,11 +213,11 @@ def teacher_detail(request, teacher_id):
     loveorg = False  # 机构的收藏状态(页面显示)
     if request.user.is_authenticated():  # 验证用户是否登录
         # 根据讲师id,讲师类型,登录用户查询收藏表中是否存在这条记录
-        love = UserLove.objects.filter(love_id=int(teacher_id),love_type=3,love_man=request.user)
+        love = UserLove.objects.filter(love_id=int(teacher_id),love_type=3,love_status=True,love_man=request.user)
         if love:
             loveteacher = True
         # 根据要机构id,机构类型,登录用户查询收藏表中是否存在这条记录
-        love = UserLove.objects.filter(love_id=teacher.work_company.id,love_type=1,love_man=request.user)
+        love = UserLove.objects.filter(love_id=teacher.work_company.id,love_type=1,love_status=True,love_man=request.user)
         if love:
             loveorg = True
 

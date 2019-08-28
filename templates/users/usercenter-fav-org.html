@@ -17,14 +17,14 @@
             <div class="head">
                 <ul class="tab_header messagehead">
                     <li class="active"><a href="{% url 'users:user_loveorg' %}">课程机构</a> </li>
-                    <li><a href="usercenter-fav-teacher.html">授课教师 </a></li>
-                    <li><a href="usercenter-fav-course.html">公开课程</a></li>
+                    <li><a href="{% url 'users:user_loveteacher' %}">授课教师 </a></li>
+                    <li><a href="{% url 'users:user_lovecourse' %}">公开课程</a></li>
                 </ul>
             </div>
 
             <div class="messagelist">
-                <div class="messages butler_list company company-fav-box">
                 {% for org in org_list %}
+                <div class="messages butler_list company company-fav-box">
                     <dl class="des fr">
                         <dt>
                             <a href="{% url 'orgs:org_detail' org.id %}">
@@ -39,15 +39,13 @@
                                 <img src="{% static 'images/authentication.png' %}"/>
 
                                 <img src="{% static 'images/gold.png' %}"/>
-
                             </div>
                             <span class="c8 clear">{{ org.address }}</span>
                             <div class="delete jsDeleteFav_org" data-favid="{{ org.id }}"></div>
                         </dd>
                     </dl>
-                {% endfor %}
                 </div>
-
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -76,7 +74,7 @@
                         alert(callback.msg);
                         {# window.location.reload();  // 取消收藏后页面刷新 #}
                         {# 拿到点击对象的祖先节点 当中有类名是des的祖先节点 然后在删除div 页面不刷新#}
-                        obj.parents('.des').remove();
+                        obj.parents('.messages').remove();
                     } else{
                         alert(callback.msg);
                     }

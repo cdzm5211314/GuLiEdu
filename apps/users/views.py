@@ -7,7 +7,8 @@ from tools.send_email_tool import send_mail_code
 from django.http import JsonResponse
 from datetime import datetime
 from operations.models import UserLove
-from orgs.models import OrgInfo
+from orgs.models import OrgInfo,TeacherInfo
+from courses.models import CourseInfo
 
 # Create your views here.
 
@@ -240,7 +241,7 @@ def user_course(request):
         'course_list':course_list,
     })
 
-# 个人用户中心-我的收藏(机构1,课程2,讲师3)
+# 个人用户中心-我的收藏(机构1)
 def user_loveorg(request):
 
     # 根据登陆用户查找 用户收藏表的所有信息  然后在根据 类型 筛选出收藏信息(机构)
@@ -252,10 +253,46 @@ def user_loveorg(request):
     org_ids = [userloveorg.love_id for userloveorg in  userloveorg_list]
 
     # 根据收藏id查找到机构信息
-    org_list = OrgInfo.objects.filter(cityinfo_id__in=org_ids)
+    org_list = OrgInfo.objects.filter(id__in=org_ids)
 
     return render(request,'users/usercenter-fav-org.html',{
         'org_list':org_list,
+    })
+
+# 个人用户中心-我的收藏(讲师3)
+def user_loveteacher(request):
+
+    # 根据登陆用户查找 用户收藏表的所有信息  然后在根据 类型 筛选出收藏信息(讲师)
+    # userloveteacher_list = request.user.userlove_set.all()
+    # 直接从 用户收藏表 中根据登陆用户于类型字典  查找到需要的收藏信息(讲师)
+    userloveteacher_list = UserLove.objects.filter(love_man=request.user,love_type=3,love_status=True)
+
+    # 根据收藏信息获取到收藏id(讲师)
+    teacher_ids = [userloveteacher.love_id for userloveteacher in  userloveteacher_list]
+
+    # 根据收藏id查找到机构信息
+    teacher_list = TeacherInfo.objects.filter(id__in=teacher_ids)
+
+    return render(request,'users/usercenter-fav-teacher.html',{
+        'teacher_list':teacher_list,
+    })
+
+# 个人用户中心-我的收藏(课程2)
+def user_lovecourse(request):
+
+    # 根据登陆用户查找 用户收藏表的所有信息  然后在根据 类型 筛选出收藏信息(课程)
+    # userlovecourse_list = request.user.userlove_set.all()
+    # 直接从 用户收藏表 中根据登陆用户于类型字典  查找到需要的收藏信息(课程)
+    userlovecourse_list = UserLove.objects.filter(love_man=request.user,love_type=2,love_status=True)
+
+    # 根据收藏信息获取到收藏id(课程)
+    course_ids = [userlovecourse.love_id for userlovecourse in  userlovecourse_list]
+
+    # 根据收藏id查找到机构信息
+    course_list = CourseInfo.objects.filter(id__in=course_ids)
+
+    return render(request,'users/usercenter-fav-course.html',{
+        'course_list':course_list,
     })
 
 
