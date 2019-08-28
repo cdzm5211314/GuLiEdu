@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from tools.send_email_tool import send_mail_code
 from django.http import JsonResponse
 from datetime import datetime
-from operations.models import UserLove
+from operations.models import UserLove,UserMessage
 from orgs.models import OrgInfo,TeacherInfo
 from courses.models import CourseInfo
 
@@ -67,6 +67,12 @@ def user_login(request):
                 # 判断用户是否被激活,如果没激活则无法登陆
                 if user.is_start:  # 已激活
                     login(request,user)
+                    # 登陆成功后发一条信息
+                    userMessage = UserMessage()
+                    userMessage.message_man = user.id
+                    userMessage.message_content = '欢迎登陆...'
+                    userMessage.save()
+
                     return redirect(reverse('index'))
                 else:
                     return HttpResponse("你的账号未被激活,请去邮箱激活,否则无法登陆...")
@@ -156,7 +162,7 @@ def user_info(requests):
 
     return render(requests,'users/usercenter-info.html')
 
-# 个人用户中心-修改用户头像
+# 个人用户中心-个人资料-修改用户头像
 def user_changeimage(request):
     # request.POST 验证图片文件以外的其他内容
     # request.FILES 验证图片文件
@@ -169,7 +175,7 @@ def user_changeimage(request):
     else:
         return JsonResponse({'status':'fail'})
 
-# 个人用户中心-修改用户信息
+# 个人用户中心-个人资料-修改用户信息
 def user_changeinfo(request):
     user_changeinfo_form = UserChangeInfoForm(request.POST,instance=request.user)
     if user_changeinfo_form.is_valid():
@@ -178,7 +184,7 @@ def user_changeinfo(request):
     else:
         return JsonResponse({'status':'fail','msg':'修改失败'})
 
-# 个人用户中心-修改用户邮箱-获取验证码
+# 个人用户中心-个人资料-修改用户邮箱-发送验证码
 def user_changeemail(request):
     user_changeemail_form = UserChangeEmailForm(request.POST)
     if user_changeemail_form.is_valid():  # 验证输入的新邮箱数据
@@ -206,7 +212,7 @@ def user_changeemail(request):
     else:  # 输入的邮箱信息未通过验证
         return JsonResponse({'status':'fail','msg':'输入邮箱信息错误'})
 
-# 个人用户中心-修改用户邮箱-完成
+# 个人用户中心-个人资料-修改用户邮箱-完成
 def user_resetemail(request):
 
     user_resetemail_form = UserResetEmailForm(request.POST)
@@ -295,4 +301,11 @@ def user_lovecourse(request):
         'course_list':course_list,
     })
 
+# 个人用户中心-我的消息
+def user_message(request):
 
+    msg_list = UserMessage.objects.filter(message_man=request.user.id)
+
+    return render(request,'users/usercenter-message.html',{
+        'msg_list':msg_list,
+    })
