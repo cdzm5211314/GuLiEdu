@@ -21,6 +21,7 @@ class CourseInfo(models.Model):
     teacher_tell = models.CharField(max_length=100,verbose_name="老师教导")
     orginfo = models.ForeignKey(OrgInfo,verbose_name="所属机构")
     teacherinfo = models.ForeignKey(TeacherInfo,verbose_name="所属讲师")
+    # is_banner 首页公开课程是否轮播字段,避免首页显示重复公开课程
     is_banner = models.BooleanField(default=False,verbose_name="是否轮播")
     add_time = models.DateTimeField(default=datetime.now,verbose_name="添加时间")
 

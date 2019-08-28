@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
 from users.forms import UserRegisterForm, UserLoginForm,UserForgetForm,UserResetForm,UserChangeimageForm,UserChangeInfoForm,UserChangeEmailForm,UserResetEmailForm
-from users.models import UserProfile,EmailVerifyCode
+from users.models import UserProfile,EmailVerifyCode,BannerInfo
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
 from tools.send_email_tool import send_mail_code
@@ -14,7 +14,22 @@ from courses.models import CourseInfo
 
 # 主页
 def index(request):
-    return render(request, 'index.html')
+
+    # 首页轮播图数据展示-5张
+    all_banners = BannerInfo.objects.all().order_by('-add_time')[:5]
+    # 首页公开课程轮播图数据展示-2张
+    course_banners = CourseInfo.objects.filter(is_banner=True)[:3]
+    # 首页公开课程其他数据展示-6张
+    all_courses = CourseInfo.objects.filter(is_banner=False)[:6]
+    # 首页课程机构数据显示-15张
+    all_orgs = OrgInfo.objects.all()[:6]
+
+    return render(request, 'index.html',{
+        'all_banners':all_banners,
+        'course_banners':course_banners,
+        'all_courses':all_courses,
+        'all_orgs':all_orgs,
+    })
 
 
 # 注册
