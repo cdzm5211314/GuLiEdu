@@ -2,7 +2,7 @@ from django.shortcuts import render
 from courses.models import CourseInfo
 from operations.models import UserLove, UserCourse, UserComment
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
+from django.db.models import Q
 
 # Create your views here.
 
@@ -12,6 +12,12 @@ def course_list(request):
     all_courses = CourseInfo.objects.all().order_by('-add_time')
     # 查询公开课程中的推荐课程,根据最新推荐课程获取
     recommend_courses = all_courses.order_by('-add_time')[:3]
+
+    # 全局搜索功能过滤
+    keywords = request.GET.get('keywords','')
+    if keywords:
+        # 根据讲师名称模糊查找
+        all_courses = all_courses.filter(Q(name__icontains = keywords)|Q(desc__icontains=keywords)|Q(detail__icontains=keywords))
 
     # 课程按照(最新,最热门[点击量],参与人数)进行排序
     sort = request.GET.get('sort', '')
@@ -39,7 +45,7 @@ def course_list(request):
         'recommend_courses': recommend_courses,
         'pages': pages,
         'sort': sort,
-
+        'keywords':keywords,
     })
 
 # 公开课课程详情页

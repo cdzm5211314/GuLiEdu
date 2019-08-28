@@ -117,7 +117,7 @@
 			</div>
 			<p class="line"></p>
 			<div class="wp clear">
-                <span class="fl">? 2012 www.atguigu.com谷粒教育-在线学习交流平台 保留所有权利</span>
+                <span class="fl">? 2012 www.atguigu.com 谷粒教育-在线学习交流平台 保留所有权利</span>
                 <span class="fr">copyright ? 2012 ICP备案证书号：蜀ICP备xxxxx号-1</span>
 			</div>
 		</div>
@@ -141,6 +141,33 @@
 <script src="{% static 'js/plugins/jquery.scrollLoading.js' %}"  type="text/javascript"></script>
 <script src="{% static 'js/deco-common.js' %}"  type="text/javascript"></script>
 <script src="{% static 'js/index.js' %}" type="text/javascript"></script>
+
+{# 全局搜索功能 #}
+<script>
+    // 页面加载完成
+    $(function () {
+        // 点击搜索按钮 进行检索, 不使用ajax请求,需要页面进行跳转
+        $('#jsSearchBtn').click(function () {
+            var search_type = $('#jsSelectOption').attr('data-value');  // 获取搜索框中的选中的下拉列选项的值
+            var key_words = $('#search_keywords').val();  // 获取搜索框中输入的值
+            var url = '';
+
+            // 判断搜索框选中的是哪个下拉列表,然后进行url拼接,进行页面跳转
+            if(search_type == 'org'){
+                url = '{% url 'orgs:org_list' %}';
+            }else if(search_type == 'course'){
+                url = '{% url 'courses:course_list' %}';
+            }else{
+                url = '{% url 'orgs:teacher_list' %}';
+            }
+            url = url + '?keywords=' + key_words;  // url拼接参数
+
+            window.location.href = url  // 发送请求
+        });
+
+    });
+
+</script>
 
 {% block myjs %}{% endblock %}
 
