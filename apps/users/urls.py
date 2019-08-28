@@ -40,5 +40,7 @@ urlpatterns = [
     url(r'^user_lovecourse/$', views.user_lovecourse, name='user_lovecourse'),
     # 个人用户中心-我的消息
     url(r'^user_message/$', views.user_message, name='user_message'),
+    # 个人用户中心-我的消息-未读消息变成已读消息
+    url(r'^user_deletemessage/$', views.user_deletemessage, name='user_deletemessage'),
 
 ]

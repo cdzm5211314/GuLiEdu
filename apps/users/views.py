@@ -309,3 +309,16 @@ def user_message(request):
     return render(request,'users/usercenter-message.html',{
         'msg_list':msg_list,
     })
+
+# 个人用户中心-我的消息-未读消息变成已读消息
+def user_deletemessage(request):
+
+    msgid = request.GET.get('msgid','')  # ajax请求传递过来未读消息的id
+    if msgid:
+        userMessage = UserMessage.objects.filter(id=int(msgid))[0]  # 根据消息id从消息表查找消息对象
+        userMessage.message_status = True  # 修改未读消息的状态False(默认)为True
+        userMessage.save()
+        return JsonResponse({'status':'ok','msg':'已读'})
+    else:
+        return JsonResponse({'status':'fail','msg':'读取失败'})
+

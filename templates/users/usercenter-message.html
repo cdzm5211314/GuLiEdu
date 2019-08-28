@@ -22,10 +22,11 @@
 
             <div class="messagelist">
             {% for msg in msg_list %}
-                <div class="messages">
+                <div class="messages" msg-id="{{ msg.id }}">
                     <div class="fr">
                         <div class="top"><span class="fl time">{{ msg.add_time }}</span><span class="fr btn foldbtn"></span></div>
-                        <p>
+                        {# 当消息表状态为False时,未读消息显示红色 #}
+                        <p {% if not msg.message_status %} style="color: red"  {% endif %}>
                             {{ msg.message_content }}
                         </p>
                     </div>
@@ -49,4 +50,30 @@
 
 {% block user %}{% endblock %}
 
+{% block myjs1 %}
+<script>
+    // 页面加载完成
+    $(function () {
+        // 点击div消息块,把未读消息变成已读消息
+        $('.messages').click(function () {
+            var msgid = $(this).attr('msg-id');
+            $.ajax({
+                type:'GET',
+                url:'{% url 'users:user_deletemessage' %}',
+                data:{
+                    msgid:msgid,
+                },
+                success:function (callback) {
+                    if(callback.status == 'ok'){  // 未读消息状态已更改为True(已读)
+                        // 然后修改消息内容的颜色样式,即刷新页面
+                        window.location.reload()
+                    }else{
+                        alert(callback.msg)
+                    }
+                }
+            })
 
+        });
+    })
+</script>
+{% endblock %}
