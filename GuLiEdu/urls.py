@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 # from django.contrib import admin
 import xadmin
 from apps.users import views
+from users.views import IndexView
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
@@ -31,7 +32,9 @@ urlpatterns = [
     url(r'^orgs/', include('orgs.urls', namespace='orgs')),
     url(r'^operations/', include('operations.urls', namespace='operations')),
 
-    # 主页
-    url(r'^$', views.index, name='index')
+    # 主页 --- FBV
+    # url(r'^$', views.index, name='index'),
+    # 主页 --- CBV
+    url(r'^$', IndexView.as_view(), name='index'),
 
 ]

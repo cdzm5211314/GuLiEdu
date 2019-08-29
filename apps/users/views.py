@@ -9,27 +9,47 @@ from datetime import datetime
 from operations.models import UserLove,UserMessage
 from orgs.models import OrgInfo,TeacherInfo
 from courses.models import CourseInfo
+from django.views import View
 
 # Create your views here.
 
-# 主页
-def index(request):
+# 主页 --- CBV
+class IndexView(View):
+    def get(self,request):
+        # 首页轮播图数据展示-5张
+        all_banners = BannerInfo.objects.all().order_by('-add_time')[:5]
+        # 首页公开课程轮播图数据展示-2张
+        course_banners = CourseInfo.objects.filter(is_banner=True)[:3]
+        # 首页公开课程其他数据展示-6张
+        all_courses = CourseInfo.objects.filter(is_banner=False)[:6]
+        # 首页课程机构数据显示-15张
+        all_orgs = OrgInfo.objects.all()[:6]
 
-    # 首页轮播图数据展示-5张
-    all_banners = BannerInfo.objects.all().order_by('-add_time')[:5]
-    # 首页公开课程轮播图数据展示-2张
-    course_banners = CourseInfo.objects.filter(is_banner=True)[:3]
-    # 首页公开课程其他数据展示-6张
-    all_courses = CourseInfo.objects.filter(is_banner=False)[:6]
-    # 首页课程机构数据显示-15张
-    all_orgs = OrgInfo.objects.all()[:6]
+        return render(request, 'index.html',{
+            'all_banners':all_banners,
+            'course_banners':course_banners,
+            'all_courses':all_courses,
+            'all_orgs':all_orgs,
+        })
 
-    return render(request, 'index.html',{
-        'all_banners':all_banners,
-        'course_banners':course_banners,
-        'all_courses':all_courses,
-        'all_orgs':all_orgs,
-    })
+# 主页 --- FBV
+# def index(request):
+#
+#     # 首页轮播图数据展示-5张
+#     all_banners = BannerInfo.objects.all().order_by('-add_time')[:5]
+#     # 首页公开课程轮播图数据展示-2张
+#     course_banners = CourseInfo.objects.filter(is_banner=True)[:3]
+#     # 首页公开课程其他数据展示-6张
+#     all_courses = CourseInfo.objects.filter(is_banner=False)[:6]
+#     # 首页课程机构数据显示-15张
+#     all_orgs = OrgInfo.objects.all()[:6]
+#
+#     return render(request, 'index.html',{
+#         'all_banners':all_banners,
+#         'course_banners':course_banners,
+#         'all_courses':all_courses,
+#         'all_orgs':all_orgs,
+#     })
 
 
 # 注册
