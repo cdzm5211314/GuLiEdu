@@ -29,9 +29,14 @@ sys.path.insert(0,os.path.join(BASE_DIR,'extra_apps'))
 SECRET_KEY = '#t)f9@ch7ipf%bw7y4g32e++@f$)igfq=t&_-0dgl6*0m)p&$('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+# DEBUG = True  # True为开发阶段使用,False为上线使用阶段
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # 建议不要使用*通配符去配置,*表示任意值
+# ALLOWED_HOSTS = []  # ALLOWED_HOSTS为了限定请求中的host值,以防止黑客构造包来发送请求,只有在列表中的host才能访问
+
+# 注: 当DEBUG设置为False的时候必须配置ALLOWED_HOSTS这个属性的值。否则会抛出异常。
+
 
 
 # Application definition
@@ -141,6 +146,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 # 设置静态文件的存储路径:
+# 注: 当项目上线使用阶段时,配置静态文件存储路径会失效
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static'),
 ]

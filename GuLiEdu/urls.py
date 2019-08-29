@@ -40,3 +40,6 @@ urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
 
 ]
+
+handler404 = 'users.views.handler_404'
+handler404 = 'users.views.handler_500'
