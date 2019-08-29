@@ -48,12 +48,10 @@ INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     'orgs.apps.OrgsConfig',
     'operations.apps.OperationsConfig',
-    # 配置xadmin插件应用
-    'xadmin',
+    'xadmin',  # 配置xadmin插件应用
     'crispy_forms',
-    # 配置第三方验证码
-    'captcha',
-
+    'captcha',  # 配置第三方验证码
+    'DjangoUeditor',  # 配置DjangoUeditor富文本编辑器插件应用
 
 ]
 

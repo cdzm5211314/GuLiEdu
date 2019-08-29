@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from DjangoUeditor.models import UEditorField
 
 # Create your models here.
 
@@ -23,15 +24,16 @@ class OrgInfo(models.Model):
     study_num = models.IntegerField(default=0,verbose_name="学习人数")
     address = models.CharField(max_length=200,verbose_name="机构地址")
     desc = models.CharField(max_length=200,verbose_name="机构简介")
-    # detail = UEditorField(verbose_name='机构详情',
-    #                       width=700,
-    #                       height=400,
-    #                       toolbars='full',
-    #                       imagePath='ueditor/images/',
-    #                       filePath='ueditor/files/',
-    #                       upload_settings={'imageMaxSizing':1024000},
-    #                       default='')
-    detail = models.TextField(verbose_name='机构详情')
+    # 使用DjangoUeditor富文本插件
+    detail = UEditorField(verbose_name='机构详情',
+                          width=700,
+                          height=400,
+                          toolbars='full',
+                          imagePath='ueditor/images/',
+                          filePath='ueditor/files/',
+                          upload_settings={'imageMaxSizing':1024000},
+                          default='')
+    # detail = models.TextField(verbose_name='机构详情')
     love_num = models.IntegerField(default=0,verbose_name="收藏数")
     click_num = models.IntegerField(default=0,verbose_name="访问量")
     category = models.CharField(choices=(('pxjg','培训机构'),('gx','高校'),('gr','个人')),max_length=10,verbose_name="机构类别")
